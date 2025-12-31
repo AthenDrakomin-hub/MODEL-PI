@@ -17,14 +17,14 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder }: any) => (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
         <div className="space-y-10 md:space-y-16 text-center lg:text-left">
           <div className="space-y-4 md:space-y-6">
-            <h2 className="text-5xl sm:text-6xl md:text-9xl font-black uppercase tracking-tighter leading-none">
+            <h2 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85]">
               {t.launch.remains} <br/>
               <span className="text-red-600 text-glow">{(100 - stats.progress).toFixed(3)}%</span>
             </h2>
-            <p className="text-gray-400 text-lg md:text-2xl leading-relaxed max-w-xl mx-auto lg:mx-0">{t.launch.desc}</p>
+            <p className="text-gray-400 text-base md:text-2xl leading-relaxed max-w-xl mx-auto lg:mx-0 px-4 sm:px-0">{t.launch.desc}</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 max-w-lg mx-auto lg:mx-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 max-w-lg mx-auto lg:mx-0 px-4 sm:px-0">
             <div className="glass-effect p-6 md:p-8 rounded-2xl md:rounded-3xl border-white/5">
               <div className="flex items-center justify-center lg:justify-start space-x-3 text-red-600 mb-2 md:mb-3">
                 <Users size={16} />
@@ -42,9 +42,9 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder }: any) => (
           </div>
         </div>
 
-        <div className="lg:sticky lg:top-32 flex justify-center w-full">
-            <div className="glass-effect p-8 sm:p-12 rounded-[2rem] sm:rounded-[3.5rem] border border-white/10 shadow-2xl max-w-md w-full space-y-8 md:space-y-10">
-              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-center sm:text-left">{t.launch.lock}</h3>
+        <div className="lg:sticky lg:top-32 flex justify-center w-full px-4 sm:px-0">
+            <div className="glass-effect p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3.5rem] border border-white/10 shadow-2xl max-w-md w-full space-y-8 md:space-y-10">
+              <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-center sm:text-left">{t.launch.lock}</h3>
               <div className="space-y-4 sm:space-y-6 bg-black/40 p-6 sm:p-8 rounded-2xl sm:rounded-3xl">
                 <div className="flex justify-between items-center pb-3 sm:pb-4 border-b border-white/5">
                   <span className="text-gray-500 text-xs sm:text-sm">{t.launch.fullPrice}</span>
@@ -57,7 +57,7 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder }: any) => (
               </div>
               <button 
                 onClick={onOrder} 
-                className="w-full py-4 sm:py-5 bg-red-600 rounded-2xl font-black uppercase text-xs sm:text-sm tracking-widest hover:bg-white hover:text-black transition-all active:scale-95 flex items-center justify-center space-x-3 shadow-xl"
+                className="w-full py-4 sm:py-5 bg-red-600 rounded-2xl font-black uppercase text-[10px] sm:text-sm tracking-widest hover:bg-white hover:text-black transition-all active:scale-95 flex items-center justify-center space-x-3 shadow-xl"
               >
                 <CreditCard size={18} /><span>{t.hero.orderNow}</span>
               </button>

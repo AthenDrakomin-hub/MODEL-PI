@@ -39,13 +39,14 @@ export const FeatureSections = ({ t }: any) => {
         <div className="max-w-7xl mx-auto space-y-24">
           <h2 className="text-5xl font-black uppercase text-center tracking-tighter">{t.specs.title}</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-             <div className="bg-white/5 rounded-3xl p-10 border border-white/10">
+             <div className="bg-white/5 rounded-3xl p-10 border border-white/10 min-w-0 overflow-hidden flex flex-col">
                 <h3 className="text-xl font-bold mb-8 flex items-center space-x-2"><BarChart3 className="text-red-600" /> <span>{t.specs.performance}</span></h3>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={perfData}>
+                <div className="h-[300px] w-full flex-grow">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                    <BarChart data={perfData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                      <XAxis dataKey="name" stroke="#555" fontSize={12} />
+                      <XAxis dataKey="name" stroke="#555" fontSize={12} axisLine={false} tickLine={false} />
+                      <YAxis stroke="#555" fontSize={10} axisLine={false} tickLine={false} />
                       <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '12px' }} />
                       <Bar dataKey="tesla" name={t.specs.modelName} fill="#E82127" radius={[6, 6, 0, 0]} />
                       <Bar dataKey="others" name={t.specs.competitor} fill="#333" radius={[6, 6, 0, 0]} />
@@ -53,12 +54,13 @@ export const FeatureSections = ({ t }: any) => {
                   </ResponsiveContainer>
                 </div>
              </div>
-             <div className="bg-white/5 rounded-3xl p-10 border border-white/10">
+             <div className="bg-white/5 rounded-3xl p-10 border border-white/10 min-w-0 overflow-hidden flex flex-col">
                 <h3 className="text-xl font-bold mb-8 flex items-center space-x-2"><BatteryCharging className="text-red-600" /> <span>{t.specs.battery}</span></h3>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={[{time:'1h',t:100,o:100},{time:'24h',t:80,o:5}]}>
-                      <XAxis dataKey="time" stroke="#555" fontSize={12} />
+                <div className="h-[300px] w-full flex-grow">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                    <AreaChart data={[{time:'1h',t:100,o:100},{time:'24h',t:80,o:5}]} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <XAxis dataKey="time" stroke="#555" fontSize={12} axisLine={false} tickLine={false} />
+                      <YAxis stroke="#555" fontSize={10} axisLine={false} tickLine={false} />
                       <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '12px' }} />
                       <Area type="monotone" dataKey="t" name={t.specs.modelName} stroke="#E82127" fill="#E82127" fillOpacity={0.1} />
                     </AreaChart>

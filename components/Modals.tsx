@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { X, ArrowLeft, ShieldCheck, CreditCard as PaymentIcon, Info, CheckCircle, Wifi, Shield } from 'lucide-react';
 import { ModelPiLogo } from '../Logo';
 
-/**
- * Fix for stripe-pricing-table custom element recognition in JSX.
- * Adding this locally within the components file ensures the TypeScript compiler 
- * recognizes the custom tag and its attributes.
- */
+// Global JSX augmentation for the Stripe custom element to fix property not found error in this module
+// We augment both JSX and React.JSX namespaces to ensure the custom element is recognized
+// regardless of the project's specific TypeScript/React configuration.
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -15,6 +13,16 @@ declare global {
         'pricing-table-id': string;
         'publishable-key': string;
       };
+    }
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        'stripe-pricing-table': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+          'pricing-table-id': string;
+          'publishable-key': string;
+        };
+      }
     }
   }
 }
@@ -54,57 +62,57 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
   return (
     <div className="fixed inset-0 z-[110] bg-black animate-in fade-in duration-500 overflow-y-auto">
       <div className="min-h-screen flex flex-col lg:flex-row">
-        {/* Left Side: Brand & Context */}
-        <div className="w-full lg:w-1/3 bg-neutral-950 p-6 md:p-12 lg:p-16 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/5">
-          <button onClick={onClose} className="flex items-center space-x-2 text-gray-500 hover:text-white mb-6 md:mb-10 group transition-colors">
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> 
-            <span className="text-[10px] font-black uppercase tracking-widest">BACK TO HUB</span>
+        {/* Left Side: Brand & Context - More compact */}
+        <div className="w-full lg:w-[30%] bg-neutral-950 p-6 md:p-10 lg:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/5">
+          <button onClick={onClose} className="flex items-center space-x-2 text-gray-500 hover:text-white mb-6 group transition-colors">
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+            <span className="text-[9px] font-black uppercase tracking-widest">BACK TO HUB</span>
           </button>
           
-          <div className="space-y-6 md:space-y-10 max-w-sm mx-auto lg:mx-0">
-            <div className="space-y-2">
-              <div className="text-red-600 font-black text-xs uppercase tracking-[0.3em] mb-2">Secure Gateway</div>
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-black uppercase tracking-tighter leading-none">
+          <div className="space-y-6 max-w-sm mx-auto lg:mx-0">
+            <div className="space-y-1">
+              <div className="text-red-600 font-black text-[10px] uppercase tracking-[0.3em] mb-1">Secure Gateway</div>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-none">
                 MODEL PI <br/> 
                 <span className="text-red-600">BATCH 01</span>
               </h1>
             </div>
 
-            <div className="bg-red-600/5 border border-red-600/20 p-5 rounded-2xl flex items-start space-x-4">
-              <Shield className="text-red-500 shrink-0 mt-1" size={16} />
-              <div className="space-y-1">
-                <p className="text-[10px] text-gray-200 uppercase font-black tracking-widest">Pioneer Reservation</p>
-                <p className="text-[9px] text-gray-500 font-bold leading-relaxed">{t.launch.desc}</p>
+            <div className="bg-red-600/5 border border-red-600/20 p-4 rounded-xl flex items-start space-x-3">
+              <Shield className="text-red-500 shrink-0 mt-0.5" size={14} />
+              <div className="space-y-0.5">
+                <p className="text-[9px] text-gray-200 uppercase font-black tracking-widest">Pioneer Reservation</p>
+                <p className="text-[8px] text-gray-500 font-bold leading-snug">{t.launch.desc}</p>
               </div>
             </div>
 
-            <div className="hidden lg:block space-y-3 pt-4 border-t border-white/5">
-              <div className="flex items-center gap-3 text-gray-600">
-                <ShieldCheck size={14} />
-                <span className="text-[8px] font-black uppercase tracking-widest">End-to-End Encrypted</span>
+            <div className="hidden lg:block space-y-2.5 pt-4 border-t border-white/5">
+              <div className="flex items-center gap-2.5 text-gray-600">
+                <ShieldCheck size={12} />
+                <span className="text-[7px] font-black uppercase tracking-widest">End-to-End Encrypted</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-600">
-                <CheckCircle size={14} />
-                <span className="text-[8px] font-black uppercase tracking-widest">Instant Confirmation</span>
+              <div className="flex items-center gap-2.5 text-gray-600">
+                <CheckCircle size={12} />
+                <span className="text-[7px] font-black uppercase tracking-widest">Instant Confirmation</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Stripe Pricing Table - Optimized Spacing */}
-        <div className="flex-1 bg-black p-4 md:p-8 lg:p-12 flex flex-col justify-center relative min-h-[600px]">
-          <div className="absolute inset-0 opacity-10 pointer-events-none">
+        {/* Right Side: Stripe Pricing Table - Tighter Fit */}
+        <div className="flex-1 bg-black p-2 md:p-6 lg:p-8 flex flex-col justify-center relative min-h-[500px]">
+          <div className="absolute inset-0 opacity-5 pointer-events-none">
              <div className="w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-600/20 via-transparent to-transparent" />
           </div>
           
-          <div className="relative z-10 w-full max-w-4xl mx-auto bg-white/[0.02] rounded-[1.5rem] p-1 md:p-4 border border-white/10 shadow-3xl">
-            <div className="mb-4 text-center px-4 pt-4">
-              <h2 className="text-lg md:text-xl font-black uppercase tracking-tight text-white mb-1">Select Pioneer Batch</h2>
-              <p className="text-[9px] text-gray-500 uppercase font-bold tracking-[0.2em]">Secured Checkout via Stripe</p>
+          <div className="relative z-10 w-full max-w-3xl mx-auto bg-white/[0.01] rounded-[1.25rem] p-0.5 md:p-2 border border-white/5 shadow-3xl">
+            <div className="mb-2 text-center pt-4 pb-2">
+              <h2 className="text-md md:text-lg font-black uppercase tracking-tight text-white/90 mb-0.5">Select Pioneer Batch</h2>
+              <p className="text-[8px] text-gray-600 uppercase font-bold tracking-[0.2em]">PCI-DSS Compliant Checkout</p>
             </div>
 
-            {/* Injected Stripe Pricing Table - Tight Container */}
-            <div className="stripe-container w-full overflow-hidden rounded-xl bg-black/40">
+            {/* Tight Container for Stripe Table */}
+            <div className="stripe-container w-full overflow-hidden rounded-lg bg-black/60 min-h-[400px]">
               <stripe-pricing-table 
                 pricing-table-id="prctbl_1SkQzBRsbwjkO0VBFDKY66dv"
                 publishable-key="pk_live_51SkGFGRsbwjkO0VBWBSKMc3pUkoNYe5e3hrhHm1eDIhKoKdwapC0E9tS2HUGg4SiaGkOPDbn4TOy1oNZ4SNuwDg200UlOvubs0"
@@ -112,9 +120,9 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
               </stripe-pricing-table>
             </div>
 
-            <div className="mt-4 pb-4 text-center">
-              <p className="text-[8px] text-gray-700 uppercase font-black tracking-[0.4em] opacity-50">
-                PCI DSS COMPLIANT · SECURED BY STRIPE
+            <div className="mt-3 pb-3 text-center">
+              <p className="text-[7px] text-gray-800 uppercase font-black tracking-[0.4em] opacity-40">
+                SECURED BY STRIPE · ENCRYPTED CONNECTION
               </p>
             </div>
           </div>

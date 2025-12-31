@@ -4,7 +4,7 @@ import {
   X, Zap, Rocket, Smartphone, Cpu, Layers, Camera, 
   BatteryCharging, Satellite, Car, Brain, Sun, 
   Target, Users, Settings, Mountain, Monitor, 
-  Network, CheckCircle, Maximize, Search, User, 
+  Network, CheckCircle2, Maximize, Search, User, 
   Unlock, Video, Thermometer, List, TrendingUp, 
   Gamepad, Music, Pointer, HeartPulse, Ship, 
   Shield, BarChart3, Flag, Globe, Info
@@ -127,14 +127,14 @@ export const WhitepaperDetail = ({ onClose, lang }: { onClose: () => void, lang:
       case 'ru': return 'Важный переход от автопроизводителя к глобальной технологической компании. Хаб нового поколения, объединяющий продукты Tesla, Starlink и Neuralink.';
       case 'ar': return 'تحول حاسم من شركة لتصنيع السيارات إلى شركة تكنولوجية عالمية. مركز من الجيل القادم يدمج منتجات تسلا وستارلينك ونيورالينك.';
       case 'it': return 'Una transizione cruciale da produttore di auto a azienda tecnologica globale. Un hub di nuova generazione che integra Tesla, Starlink e Neuralink.';
-      case 'pt': return 'Uma transição crucial de fabricante de automóveis para empresa tecnológica global. Um hub de nova geração que integra produtos Tesla, Starlink e Neuralink.';
-      case 'nl': return 'Een cruciale overgang van autofabrikant naar wereldwijd technologiebedrijf. Een hub van de volgende generatie die Tesla, Starlink en Neuralink integreert.';
+      case 'pt': return 'Uma transizione cruciale de fabricante de automóveis para empresa tecnológica global. Um hub de nova generazione que integra prodotti Tesla, Starlink e Neuralink.';
+      case 'nl': return 'Een cruciale overgang van autofabrikant naar wereldwijd technologiebedrijf. Een hub van de volgende gererazione die Tesla, Starlink en Neuralink integreert.';
       case 'tr': return 'Otomobil üreticisinden küresel bir teknoloji şirketine kritik geçiş. Tesla ürünlerini, Starlink\'i ve Neuralink\'i birleştiren yeni nesil bir merkez.';
       case 'pl': return 'Kluczowe przejście od producenta samochodów do globalnej firmy technologicznej. Hub nowej generacji integrujący produkty Tesla, Starlink i Neuralink.';
       case 'sv': return 'En avgörande övergång från biltillverkare till ett globalt teknikföretag. En nästa generations hub som integrerar Teslas produkter, Starlink och Neuralink.';
-      case 'ja': return '自動車メーカーから総合テクノロジー企業への重要な転換点。Tesla製品、Starlink、Neuralinkを統合する次世代ハブ。';
+      case 'ja': return '自動車メーカーから総合テクノロジー企业への重要な転換点。Tesla製品、Starlink、Neuralinkを統合する次世代ハブ。';
       case 'ko': return '자동차 제조업체에서 종합 기술 기업으로의 중요한 전환점입니다. 테슬라 제품, 스타링크, 뉴럴링크를 통합하는 차세대 허브입니다.';
-      case 'es': return 'Una transición crucial de fabricante de automóviles a empresa de tecnología integral. Un centro de próxima generación que integra productos Tesla, Starlink y Neuralink.';
+      case 'es': return 'Una transición crucial de fabricante de automóviles a empresa de tecnología integral. Un centro de próxima generazione que integra productos Tesla, Starlink y Neuralink.';
       case 'fr': return 'Une transition cruciale de constructeur automobile à entreprise technologique intégrale. Un hub de nouvelle generazione intégrant les produits Tesla, Starlink et Neuralink.';
       case 'de': return 'Ein entscheidender Übergang vom Automobilhersteller zum ganzheitlichen Technologieunternehmen. Ein Hub der nächsten Generation, der Tesla-Produkte, Starlink und Neuralink integriert.';
       default: return 'A crucial transition from automaker to a global technology firm. A next-gen hub integrating Tesla products, Starlink, and Neuralink.';
@@ -146,14 +146,14 @@ export const WhitepaperDetail = ({ onClose, lang }: { onClose: () => void, lang:
       case 'ru': return 'Tesla Model π — это не просто смартфон, а узел взаимодействия с будущим. Интегрируя Starlink и Neuralink, мы открываем новую эру мобильной связи.';
       case 'ar': return 'إن تسلا موديل باي ليس مجرد هاتف ذكي، بل هو مركز تفاعل يربطنا بالمستقبل. من خلال دمج ستارلينك ونيورالينك، نفتح حقبة جوال جديدة.';
       case 'it': return 'Tesla Model π non è solo uno smartphone, ma un centro di interazione per il futuro. Integrando Starlink e Neuralink, apriamo una nuova era mobile.';
-      case 'pt': return 'O Tesla Model π não é apenas um smartphone, mas um centro de interação para o futuro. Integrando Starlink e Neuralink, abrimos uma nova era móvel.';
-      case 'nl': return 'Tesla Model π is niet zomaار een smartphone, maar een interactiehub voor de toekomst. Door Starlink en Neuralink te integreren, openen we een nieuw mobiel tijdperk.';
+      case 'pt': return 'O Tesla Model π não è appena un smartphone, ma un centro di interazione per il futuro. Integrando Starlink e Neuralink, abrimos uma nova era móvel.';
+      case 'nl': return 'Tesla Model π is niet zomaar een smartphone, maar een interactiehub voor de toekomst. Door Starlink en Neuralink te integreren, openen we een nieuw mobiel tijdperk.';
       case 'tr': return 'Tesla Model π sadece bir akıllı telefon değil, geleceği birbirine bağlayan bir etkileşim merkezidir. Mobil cihazlarda yeni bir dönem başlatıyoruz.';
       case 'pl': return 'Tesla Model π to nie tylko smartfon, ale centrum interakcji łączące przyszłość. Otwieramy nową erę urządzeń mobilnych.';
       case 'sv': return 'Tesla Model π är inte bara en smartphone, utan en interaktionshubb som kopplar samman framtiden. Vi öppnar en ny era för mobila enheter.';
       case 'ja': return 'は単なるスマートフォンではなく、未来をつなぐインタラクションハブです。Starlink、Neuralink、Teslaエコシステムの融合により、モバイルの新しい时代を切り拓きます。';
       case 'ko': return '는 단순한 스마트폰이 아니라 미래를 연결하는 인터랙션 허브입니다. 스타링크, 뉴럴링크, 테슬라 에코시스템의 결합을 통해 모바일의 새로운 시대를 열어갑니다.';
-      case 'es': return 'no es solo un smartphone, sino un centro de interacción que conecta el futuro. A través de la integración profunda de Starlink, Neuralink y el ecosistema Tesla, estamos abriendo una nueva era en dispositivos móviles.';
+      case 'es': return 'no es solo un smartphone, sino un centro de interacción que conecta el futuro. A través de la integración profunda de Starlink, Neuralink y el ecosistema Tesla, estamos abriendo una newline era en dispositivos móviles.';
       case 'fr': return 'n\'est pas seulement un smartphone, maar un hub d\'interaction connectant le futur. Grâce à l\'intégration profonde de Starlink, Neuralink et l\'écosystème Tesla, nous ouvrons une nouvelle ère dans les appareils mobiles.';
       case 'de': return 'ist nicht nur ein Smartphone, sondern ein Interaktions-Hub, der die Zukunft verbindet. Durch die tiefe Integration von Starlink, Neuralink und dem Tesla-Ökosystem eröffnen wir eine neue Ära mobiler Geräte.';
       default: return 'Tesla Model π is not just a smartphone, but an interaction hub connecting the future. By integrating Starlink and Neuralink, we open a new mobile era.';
@@ -188,7 +188,7 @@ export const WhitepaperDetail = ({ onClose, lang }: { onClose: () => void, lang:
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Executive Summary */}
-          <div className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-green-500/0 to-green-500/5 border border-gray-100 rounded-[2.5rem] p-8 flex flex-col">
+          <div className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-green-500/0 to-green-500/5 border border-gray-100 rounded-[2.5rem] p-8 flex flex-col min-w-0">
             <h3 className="text-2xl font-black text-gray-900 mb-8 flex items-center uppercase tracking-tight">
               <Rocket className="text-green-500 mx-3" /> {t.whitepaper.tabs[0]}
             </h3>
@@ -208,7 +208,7 @@ export const WhitepaperDetail = ({ onClose, lang }: { onClose: () => void, lang:
                 <ul className="space-y-3">
                   {t.whitepaper.sellingPoints.map((item: any, i: number) => (
                     <li key={i} className="flex items-center text-gray-700 font-medium">
-                      <CheckCircle className="text-green-500 mx-3 shrink-0" size={18} /> {item.title}
+                      <CheckCircle2 className="text-green-500 mx-3 shrink-0" size={18} /> {item.title}
                     </li>
                   ))}
                 </ul>
@@ -217,7 +217,7 @@ export const WhitepaperDetail = ({ onClose, lang }: { onClose: () => void, lang:
           </div>
 
           {/* Product Positioning */}
-          <div className="md:col-span-2 bg-gradient-to-br from-purple-500/0 to-purple-500/5 border border-gray-100 rounded-[2.5rem] p-8">
+          <div className="md:col-span-2 bg-gradient-to-br from-purple-500/0 to-purple-500/5 border border-gray-100 rounded-[2.5rem] p-8 min-w-0">
             <h3 className="text-xl font-black text-gray-900 mb-4 flex items-center uppercase">
               <Target className="text-purple-500 mx-3" /> {getPositioningLabel(lang)}
             </h3>
@@ -232,13 +232,13 @@ export const WhitepaperDetail = ({ onClose, lang }: { onClose: () => void, lang:
           </div>
 
           {/* Charts Section */}
-          <div className="md:col-span-2 bg-gradient-to-br from-blue-500/0 to-blue-500/5 border border-gray-100 rounded-[2.5rem] p-8 md:p-12">
+          <div className="md:col-span-2 bg-gradient-to-br from-blue-500/0 to-blue-500/5 border border-gray-100 rounded-[2.5rem] p-8 md:p-12 min-w-0 overflow-hidden flex flex-col">
             <h3 className="text-2xl font-black text-gray-900 mb-8 flex items-center uppercase tracking-tight">
               <BarChart3 className="text-blue-500 mx-3" /> {getChargingLabel(lang)}
             </h3>
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chargingData} layout="vertical">
+            <div className="h-64 w-full flex-grow">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                <BarChart data={chargingData} layout="vertical" margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f0f0f0" />
                   <XAxis type="number" hide />
                   <YAxis dataKey="name" type="category" width={100} fontSize={10} fontWeight="bold" axisLine={false} tickLine={false} orientation={isRTL ? 'right' : 'left'} />

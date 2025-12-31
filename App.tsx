@@ -79,15 +79,24 @@ export default function App() {
   }, [currentTime]);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      // Use 50px as threshold for visual change
+      if (window.scrollY > 50) {
+        if (!scrolled) setScrolled(true);
+      } else {
+        if (scrolled) setScrolled(false);
+      }
+    };
+
     const tick = setInterval(() => setCurrentTime(new Date().getTime()), 1000);
     
-    window.addEventListener('scroll', handleScroll);
+    // Passive scroll listener for better mobile performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
       clearInterval(tick);
     };
-  }, []);
+  }, [scrolled]);
 
   const handleOpenDoc = (doc: string) => {
     const pioneerKeys = ['先锋计划', 'Pioneer Plan', 'パイオニア計画', 'Программа Pioneer', 'برنامج الرواد', 'Plan Pioneer', 'Lote 01 Asiento Pioneer', 'Batch 01 Siège Pioneer', 'Batch 01 Pioneer Platz', 'Lotto 01 Posto Pioneer', 'Batch 01 Pioneer Plaats', 'Batch 01 Pioneer Hak', 'Batch 01 Pioneer-plats'];
