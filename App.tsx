@@ -14,6 +14,8 @@ import { StarlinkTreatyDetail } from './components/StarlinkTreatyDetail';
 import { LegalAgreementDetail } from './components/LegalAgreementDetail';
 import { PrivacyStatementDetail } from './components/PrivacyStatementDetail';
 import { SubscriberPortal } from './components/SubscriberPortal';
+// Use the central SupportedLang type
+import { SupportedLang } from './types';
 
 // --- 常量配置 ---
 const START_TIME = new Date().getTime() - (5 * 24 * 60 * 60 * 1000);
@@ -22,8 +24,6 @@ const BATCH_SIZE = 1000000;
 const BASE_BOOKINGS = 847291;
 const UNIT_PRICE = 299;
 const DEPOSIT_RATE = 0.3;
-
-export type SupportedLang = 'zh' | 'en' | 'ja' | 'es' | 'fr' | 'de' | 'ko' | 'it' | 'pt' | 'nl' | 'tr' | 'pl' | 'sv' | 'ru' | 'ar';
 
 export default function App() {
   // 智能初始化语言

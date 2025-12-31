@@ -1,5 +1,5 @@
 
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
 You are the Model Pi Visionary Assistant, a state-of-the-art AI interface representing Tesla's mobile division.
@@ -20,10 +20,17 @@ Rules:
 - Always maintain a "premium" aura.
 `;
 
+/**
+ * Interface with the Model Pi AI Assistant using Gemini 3 Flash.
+ * @param message The user's input message.
+ * @param history Optional conversation history.
+ * @returns The generated response text.
+ */
 export const chatWithAssistant = async (message: string, history: { role: 'user' | 'model', parts: { text: string }[] }[] = []) => {
   try {
+    // Correctly initialize right before usage to ensure current environment context is captured
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    const response = await ai.models.generateContent({
+    const response: GenerateContentResponse = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: [
         ...history,
@@ -36,6 +43,7 @@ export const chatWithAssistant = async (message: string, history: { role: 'user'
       }
     });
 
+    // Access the text property directly (not a method call)
     return response.text;
   } catch (error) {
     console.error("Gemini Error:", error);
