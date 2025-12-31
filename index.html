@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Tesla Model Pi - Official Delivery Portal | model-pi.xyz</title>
+  <meta name="title" content="Tesla Model Pi - Official Delivery Portal | model-pi.xyz">
+  <meta name="description" content="Experience the future of mobile connectivity with Tesla Model Pi. Native Starlink V3 support, Neuralink BCI integration, and Hyper-Solar charging. The first smartphone built for multi-planetary civilization.">
+  <meta name="keywords" content="Tesla Model Pi, Model Pi, Starlink Phone, Satellite Phone, Neuralink Smartphone, Elon Musk Phone, Tesla Mobile, Solar Charging Phone, Mars Phone, Interplanetary Communication">
+  <meta name="author" content="Tesla Model Pi Project">
+  <link rel="canonical" href="https://model-pi.xyz" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://model-pi.xyz/">
+  <meta property="og:title" content="Tesla Model Pi - The Future of Interaction">
+  <meta property="og:description" content="Connect 6 billion people with Native Starlink, Neuralink BCI, and Hyper-Solar charging. Claim your Pioneer seat today.">
+  <meta property="og:image" content="https://aka.doubaocdn.com/s/KqXq1vl32h">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .glass-effect {
+        backdrop-filter: blur(16px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .floating {
+        animation: floating 6s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      .rotate-slow {
+        animation: rotate 20s linear infinite;
+      }
+      @keyframes rotate {
+        from { transform: rotateY(0deg); }
+        to { transform: rotateY(360deg); }
+      }
+      .animate-scan {
+        animation: scan 4s ease-in-out infinite;
+      }
+      @keyframes scan {
+        0%, 100% { top: 0%; opacity: 0; }
+        50% { top: 100%; opacity: 1; }
+      }
+      .glow-red {
+        box-shadow: 0 0 30px rgba(232, 33, 39, 0.3);
+      }
+      .text-glow {
+        text-shadow: 0 0 10px rgba(232, 33, 39, 0.8);
+      }
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #E82127;
+        border-radius: 10px;
+      }
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.0"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
