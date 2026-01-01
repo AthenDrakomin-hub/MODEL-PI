@@ -1,29 +1,41 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { TRANSLATIONS } from './translations';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
 import { WhitepaperSection } from './components/WhitepaperSection';
-import { WhitepaperDetail } from './components/WhitepaperDetail';
-import { FeatureSections } from './components/FeatureSections';
 import { BookingSection } from './components/BookingSection';
 import { VideoShowcase } from './components/VideoShowcase';
 import { ComparisonSection } from './components/ComparisonSection';
-import { DocumentModal, CheckoutModal } from './components/Modals';
-import { SubscriberPortal } from './components/SubscriberPortal';
-import { PrivacyStatementDetail } from './components/PrivacyStatementDetail';
-import { LegalAgreementDetail } from './components/LegalAgreementDetail';
-import { StarlinkTreatyDetail } from './components/StarlinkTreatyDetail';
-import { PioneerPlanDetail } from './components/PioneerPlanDetail';
+import { CheckoutModal, DocumentModal } from './components/Modals';
 import { SupportedLang } from './types';
 import { Loader2 } from 'lucide-react';
+
+// 懒加载大型组件 - 这将显著降低主包体积
+const WhitepaperDetail = lazy(() => import('./components/WhitepaperDetail').then(m => ({ default: m.WhitepaperDetail })));
+const FeatureSections = lazy(() => import('./components/FeatureSections').then(m => ({ default: m.FeatureSections })));
+const SubscriberPortal = lazy(() => import('./components/SubscriberPortal').then(m => ({ default: m.SubscriberPortal })));
+const PrivacyStatementDetail = lazy(() => import('./components/PrivacyStatementDetail').then(m => ({ default: m.PrivacyStatementDetail })));
+const LegalAgreementDetail = lazy(() => import('./components/LegalAgreementDetail').then(m => ({ default: m.LegalAgreementDetail })));
+const StarlinkTreatyDetail = lazy(() => import('./components/StarlinkTreatyDetail').then(m => ({ default: m.StarlinkTreatyDetail })));
+const PioneerPlanDetail = lazy(() => import('./components/PioneerPlanDetail').then(m => ({ default: m.PioneerPlanDetail })));
 
 const GLOBAL_LAUNCH_DATE = new Date('2026-01-31T23:59:59Z').getTime();
 const GLOBAL_START_DATE = new Date('2025-01-01T00:00:00Z').getTime();
 const VIRTUAL_DB_KEY = 'MODEL_PI_CORE_DATA_V2';
 const TARGET_BOOKINGS = 1000000;
 const INITIAL_BOOKINGS = 924512;
+
+// 加载占位组件
+const LoadingOverlay = () => (
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[2000]">
+    <div className="flex flex-col items-center gap-4">
+      <Loader2 className="text-red-600 animate-spin" size={40} />
+      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Uplink in Progress...</span>
+    </div>
+  </div>
+);
 
 export default function App() {
   const [lang, setLang] = useState<SupportedLang>('zh');
@@ -104,12 +116,17 @@ export default function App() {
     if (!activeDoc) return null;
     const close = () => setActiveDoc(null);
     const docName = activeDoc.toLowerCase();
-    if (docName.includes('whitepaper') || docName.includes('战略档案')) return <WhitepaperDetail onClose={close} lang={lang} />;
-    if (docName.includes('privacy') || docName.includes('隐私')) return <PrivacyStatementDetail onClose={close} lang={lang} />;
-    if (docName.includes('legal') || docName.includes('服务条款') || docName.includes('法律')) return <LegalAgreementDetail onClose={close} lang={lang} />;
-    if (docName.includes('treaty') || docName.includes('条约')) return <StarlinkTreatyDetail onClose={close} lang={lang} />;
-    if (docName.includes('pioneer') || docName.includes('先锋')) return <PioneerPlanDetail onClose={close} lang={lang} />;
-    return <DocumentModal activeDoc={activeDoc} lang={lang} onClose={close} />;
+    
+    return (
+      <Suspense fallback={<LoadingOverlay />}>
+        {docName.includes('whitepaper') || docName.includes('战略档案') ? <WhitepaperDetail onClose={close} lang={lang} /> :
+         docName.includes('privacy') || docName.includes('隐私') ? <PrivacyStatementDetail onClose={close} lang={lang} /> :
+         docName.includes('legal') || docName.includes('服务条款') || docName.includes('法律') ? <LegalAgreementDetail onClose={close} lang={lang} /> :
+         docName.includes('treaty') || docName.includes('条约') ? <StarlinkTreatyDetail onClose={close} lang={lang} /> :
+         docName.includes('pioneer') || docName.includes('先锋') ? <PioneerPlanDetail onClose={close} lang={lang} /> :
+         <DocumentModal activeDoc={activeDoc} lang={lang} onClose={close} />}
+      </Suspense>
+    );
   };
 
   if (isInitializing) {
@@ -148,10 +165,13 @@ export default function App() {
 
       <Footer t={t} onOpenDoc={setActiveDoc} theme={theme} />
 
-      {/* Modals */}
-      {showFeatureExplorer && <FeatureSections t={t} onClose={() => setShowFeatureExplorer(false)} />}
-      {showPortal && <SubscriberPortal onClose={() => setShowPortal(false)} t={t} lang={lang} dbData={dbData} />}
-      {renderActiveDoc()}
+      {/* Modals with Suspense */}
+      <Suspense fallback={<LoadingOverlay />}>
+        {showFeatureExplorer && <FeatureSections t={t} onClose={() => setShowFeatureExplorer(false)} />}
+        {showPortal && <SubscriberPortal onClose={() => setShowPortal(false)} t={t} lang={lang} dbData={dbData} />}
+        {renderActiveDoc()}
+      </Suspense>
+
       {showCheckout && <CheckoutModal isOpen={showCheckout} t={t} onClose={() => setShowCheckout(false)} onPaymentSuccess={() => { setDbData(p => ({...p, isPaid:true, joinedAt:Date.now()})); setShowCheckout(false); setShowPortal(true); }} />}
     </div>
   );

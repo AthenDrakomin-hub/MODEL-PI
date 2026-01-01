@@ -22,7 +22,21 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'dist',
-      sourcemap: false
+      sourcemap: false,
+      chunkSizeWarningLimit: 1000, // 提高警告限制到 1MB
+      rollupOptions: {
+        output: {
+          // 优化分包策略
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react')) return 'vendor-react';
+              if (id.includes('recharts')) return 'vendor-recharts';
+              if (id.includes('lucide-react')) return 'vendor-lucide';
+              return 'vendor-others';
+            }
+          }
+        }
+      }
     }
   };
 });
