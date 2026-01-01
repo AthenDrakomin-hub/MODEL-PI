@@ -3,7 +3,7 @@ import React from 'react';
 import { Package, Shield, Sparkles, Zap, Globe, Cpu } from 'lucide-react';
 
 interface MagicLabelProps {
-  icon: React.ElementType;
+  icon: React.ComponentType<any>;
   title: string;
   desc: string;
 }

@@ -15,7 +15,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["node"]
   },
   "include": [
     "index.tsx", 
@@ -25,7 +26,8 @@
     "translations.ts", 
     "Logo.tsx", 
     "services/**/*.ts", 
-    "components/**/*.tsx"
+    "components/**/*.tsx",
+    "vite.config.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

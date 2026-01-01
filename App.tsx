@@ -155,8 +155,8 @@ export default function App() {
   const renderActiveDoc = () => {
     if (!activeDoc) return null;
     const close = () => setActiveDoc(null);
-    const isPrivacy = ['隐私声明', 'Privacy', 'Privacy Policy', '隐私', 'Confidentialité', 'Privacidad'].includes(activeDoc);
-    const isLegal = ['服务条款', '法律协议', 'Terms', 'Legal', 'Legal Agreements', 'Hukuki'].includes(activeDoc);
+    const isPrivacy = ['隐私声明', 'Privacy', 'Privacy Policy', '隐私', 'Confidentialité', 'Privacidad', 'بيان الخصوصية', 'Приватность'].includes(activeDoc);
+    const isLegal = ['服务条款', '法律协议', 'Terms', 'Legal', 'Legal Agreements', 'Hukuki', 'Юридическая инфо', 'قانوني'].includes(activeDoc);
     const isTreaty = ['星链条约', 'Starlink Treaty'].includes(activeDoc);
     const isPioneer = ['先锋计划', 'Pioneer Plan'].includes(activeDoc);
     const isWhitepaper = ['Whitepaper', '战略档案', 'STRATEGIC ARCHIVE'].includes(activeDoc);
@@ -177,14 +177,20 @@ export default function App() {
           <Loader2 className="text-red-600 animate-spin relative z-10" size={64} />
         </div>
         <div className="text-[10px] font-black uppercase tracking-[0.5em] text-white animate-pulse">
-          Establishing Neural Link...
+          {t.common?.loading || 'Establishing Neural Link...'}
         </div>
       </div>
     );
   }
 
+  const isModalActive = !!(showFeatureExplorer || showPortal || activeDoc || showCheckout);
+  const isRTL = lang === 'ar';
+
   return (
-    <div className={`transition-colors duration-1000 overflow-x-hidden ${theme === 'midnight' ? 'bg-[#050505] text-white' : 'bg-[#f5f5f7] text-[#1d1d1f]'}`}>
+    <div 
+      dir={isRTL ? 'rtl' : 'ltr'}
+      className={`transition-colors duration-1000 overflow-x-hidden ${theme === 'midnight' ? 'bg-[#050505] text-white' : 'bg-[#f5f5f7] text-[#1d1d1f]'}`}
+    >
       <Header 
         t={t} lang={lang} setLang={setLang} scrolled={scrolled} endTime={dbData.endTime} isPaid={dbData.isPaid}
         theme={theme} setTheme={setTheme}
@@ -204,21 +210,21 @@ export default function App() {
       <Footer t={t} onOpenDoc={setActiveDoc} theme={theme} />
 
       {/* AI Assistant Button */}
-      <div className="fixed bottom-8 right-8 z-[200]">
+      <div className={`fixed bottom-8 ${isRTL ? 'left-8' : 'right-8'} z-[200]`}>
         {!aiOpen ? (
           <button 
             onClick={() => setAiOpen(true)}
             className={`w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all group border-4 ${theme === 'midnight' ? 'bg-red-600 border-black' : 'bg-white border-gray-200 text-red-600'}`}
           >
             <Cpu className="group-hover:rotate-12 transition-transform" />
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-500 rounded-full animate-pulse border-2 border-black" />
+            <div className={`absolute -top-1 ${isRTL ? '-left-1' : '-right-1'} w-4 h-4 bg-cyan-500 rounded-full animate-pulse border-2 border-black`} />
           </button>
         ) : (
           <div className={`w-80 md:w-96 h-[500px] glass-effect rounded-[2.5rem] border flex flex-col overflow-hidden animate-in slide-in-from-bottom-10 ${theme === 'midnight' ? 'border-white/10' : 'border-black/5'}`}>
             <div className={`p-6 border-b flex justify-between items-center ${theme === 'midnight' ? 'border-white/5 bg-white/5' : 'border-black/5 bg-black/5'}`}>
               <div className="flex items-center gap-3">
                  <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white"><Cpu size={16} /></div>
-                 <span className="text-[10px] font-black uppercase tracking-widest">T-OS Assistant</span>
+                 <span className="text-[10px] font-black uppercase tracking-widest">{t.common?.assistantTitle || 'T-OS Assistant'}</span>
               </div>
               <button onClick={() => setAiOpen(false)}><X size={18} /></button>
             </div>
@@ -233,7 +239,7 @@ export default function App() {
               ))}
               {isThinking && (
                 <div className="flex justify-start">
-                  <div className="animate-pulse text-[10px] uppercase font-black tracking-widest text-gray-500">Processing...</div>
+                  <div className="animate-pulse text-[10px] uppercase font-black tracking-widest text-gray-500">{t.common?.assistantThinking || 'Processing...'}</div>
                 </div>
               )}
             </div>
@@ -243,7 +249,7 @@ export default function App() {
                 value={aiMsg}
                 onChange={e => setAiMsg(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAiSend()}
-                placeholder="Ask about Model Π..."
+                placeholder={t.common?.assistantPlaceholder || 'Ask about Model Π...'}
                 className={`flex-grow border rounded-xl px-4 text-xs focus:outline-none focus:border-red-600 ${theme === 'midnight' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'}`}
               />
               <button onClick={handleAiSend} className="p-3 bg-red-600 text-white rounded-xl hover:bg-black transition-all">
@@ -254,15 +260,15 @@ export default function App() {
         )}
       </div>
 
-      {/* Global Modals Layer - Explicitly fixed and highest z-index */}
-      <div className="fixed inset-0 pointer-events-none z-[1000]">
-        <div className="pointer-events-auto h-full w-full">
+      {/* Global Modals Layer - Render only when active */}
+      {isModalActive && (
+        <div className="fixed inset-0 z-[1000]" dir={isRTL ? 'rtl' : 'ltr'}>
           {showFeatureExplorer && <FeatureSections t={t} onClose={() => setShowFeatureExplorer(false)} />}
           {showPortal && <SubscriberPortal onClose={() => setShowPortal(false)} t={t} lang={lang} dbData={dbData} />}
           {renderActiveDoc()}
           {showCheckout && <CheckoutModal isOpen={showCheckout} t={t} onClose={() => setShowCheckout(false)} onPaymentSuccess={handlePaymentSuccess} />}
         </div>
-      </div>
+      )}
     </div>
   );
 }

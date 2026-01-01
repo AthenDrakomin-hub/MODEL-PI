@@ -99,8 +99,8 @@ export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, i
               {showLangMenu && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)} />
-                  <div className={`absolute top-full right-0 mt-3 border rounded-2xl p-2 w-[420px] backdrop-blur-3xl shadow-2xl z-20 animate-in fade-in slide-in-from-top-2 ${theme === 'midnight' ? 'bg-black/95 border-white/10' : 'bg-white/95 border-black/10'}`}>
-                    <div className="grid grid-cols-3 gap-1">
+                  <div className={`absolute top-full right-0 mt-3 border rounded-2xl p-2 w-[calc(100vw-2rem)] md:w-[420px] backdrop-blur-3xl shadow-2xl z-20 animate-in fade-in slide-in-from-top-2 ${theme === 'midnight' ? 'bg-black/95 border-white/10' : 'bg-white/95 border-black/10'}`}>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
                       {languages.map(l => (
                         <button 
                           key={l.code} 
@@ -124,7 +124,7 @@ export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, i
                 {t.nav.portal}
               </button>
             ) : (
-              <button onClick={onOrder} className="bg-red-600 rounded-full px-5 py-2 text-[9px] font-black uppercase tracking-widest text-white hover:bg-black transition-all shadow-lg shadow-red-600/20">
+              <button onClick={onOrder} className="bg-red-600 rounded-full px-4 md:px-5 py-2 text-[9px] font-black uppercase tracking-widest text-white hover:bg-black transition-all shadow-lg shadow-red-600/20">
                 {t.nav.action}
               </button>
             )}
@@ -136,27 +136,27 @@ export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, i
       </nav>
 
       {mobileMenuOpen && (
-        <div className={`fixed inset-0 z-[110] backdrop-blur-3xl p-8 pt-24 overflow-y-auto ${theme === 'midnight' ? 'bg-black/98' : 'bg-white/98'}`}>
-          <button onClick={() => setMobileMenuOpen(false)} className={`absolute top-8 right-8 p-3 rounded-full ${theme === 'midnight' ? 'bg-white/5' : 'bg-black/5'}`}><X size={24} /></button>
-          <div className="flex flex-col space-y-8 text-center mt-10">
-            <button onClick={() => {setMobileMenuOpen(false); onOpenWhitepaper();}} className="text-4xl font-black uppercase tracking-tighter">{t.nav.design}</button>
-            <button onClick={() => {setMobileMenuOpen(false); onOpenFeatures();}} className="text-4xl font-black uppercase tracking-tighter text-red-600">{t.nav.features}</button>
+        <div className={`fixed inset-0 z-[110] backdrop-blur-3xl p-6 md:p-8 pt-20 md:pt-24 overflow-y-auto ${theme === 'midnight' ? 'bg-black/98' : 'bg-white/98'}`}>
+          <button onClick={() => setMobileMenuOpen(false)} className={`absolute top-6 md:top-8 right-6 md:right-8 p-3 rounded-full ${theme === 'midnight' ? 'bg-white/5' : 'bg-black/5'}`}><X size={24} /></button>
+          <div className="flex flex-col space-y-6 md:space-y-8 text-center mt-6 md:mt-10">
+            <button onClick={() => {setMobileMenuOpen(false); onOpenWhitepaper();}} className="text-3xl sm:text-4xl font-black uppercase tracking-tighter">{t.nav.design}</button>
+            <button onClick={() => {setMobileMenuOpen(false); onOpenFeatures();}} className="text-3xl sm:text-4xl font-black uppercase tracking-tighter text-red-600">{t.nav.features}</button>
             
             <button 
               onClick={() => {setTheme(theme === 'midnight' ? 'solar' : 'midnight'); setMobileMenuOpen(false);}}
-              className="text-xl font-black uppercase tracking-widest py-4 border border-red-600/20 rounded-2xl"
+              className="text-lg sm:text-xl font-black uppercase tracking-widest py-4 border border-red-600/20 rounded-2xl"
             >
               {theme === 'midnight' ? 'Switch to Solar Mode' : 'Switch to Midnight Mode'}
             </button>
 
             <div className={`h-px w-full ${theme === 'midnight' ? 'bg-white/10' : 'bg-black/10'}`} />
             
-            <div className="grid grid-cols-3 gap-3 mt-4 pb-12">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mt-4 pb-12">
               {languages.map(l => (
                 <button 
                   key={l.code} 
                   onClick={() => {setLang(l.code); setMobileMenuOpen(false);}} 
-                  className={`py-4 rounded-2xl border ${lang === l.code ? 'border-red-600 text-red-600 bg-red-600/5' : (theme === 'midnight' ? 'border-white/10 text-white/50' : 'border-black/10 text-black/50')} text-[10px] font-black uppercase tracking-widest`}
+                  className={`py-3 md:py-4 rounded-xl md:rounded-2xl border ${lang === l.code ? 'border-red-600 text-red-600 bg-red-600/5' : (theme === 'midnight' ? 'border-white/10 text-white/50' : 'border-black/10 text-black/50')} text-[9px] md:text-[10px] font-black uppercase tracking-widest`}
                 >
                   {l.label}
                 </button>

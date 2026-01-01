@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { 
   X, Shield, Users, Target, Calendar, Award, 
-  CheckCircle2, Info, Satellite, Zap, Brain, Sun, Microscope
+  CheckCircle2, Info, Satellite, Zap, Brain, Sun, Microscope,
+  ArrowLeft
 } from 'lucide-react';
-import { TRANSLATIONS } from '../translations';
 import { PioneerApplicationForm } from './PioneerApplicationForm';
 
 export const PioneerPlanDetail = ({ onClose, lang }: { onClose: () => void, lang: string }) => {
@@ -82,23 +82,33 @@ export const PioneerPlanDetail = ({ onClose, lang }: { onClose: () => void, lang
   ];
 
   return (
-    <div className={`fixed inset-0 z-[200] bg-black text-white overflow-y-auto animate-in fade-in slide-in-from-right-10 duration-500 custom-scrollbar ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* Side Progress Decoration */}
-      <div className={`fixed ${isRTL ? 'right-8' : 'left-8'} top-1/2 -translate-y-1/2 hidden xl:flex flex-col space-y-8 opacity-20`}>
-        <div className="w-1 h-32 bg-red-600 rounded-full" />
-        <span className="[writing-mode:vertical-rl] font-black uppercase tracking-[1em] text-xs">Pioneer Status: Active</span>
+    <div className={`fixed inset-0 z-[1200] bg-black text-white overflow-y-auto animate-in fade-in duration-500 custom-scrollbar ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Background Decor */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,_#E8212715_0%,_transparent_50%)]" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-12 md:py-24">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-20">
-          <div className="space-y-4">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-600/10 border border-red-600/30 rounded text-[10px] font-black uppercase text-red-500 mx-2">
-              <Shield size={12} /> <span>Pioneer Program v1.0</span>
-            </div>
-            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none">{getPlanTitle(lang)}</h1>
+      <div className="max-w-6xl mx-auto px-6 py-12 md:py-24 relative z-10">
+        {/* Navigation Header */}
+        <div className="flex justify-between items-center mb-16 md:mb-24">
+          <div className="flex items-center gap-4">
+             {isApplying && (
+               <button 
+                onClick={() => setIsApplying(false)}
+                className="p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all border border-white/10 group"
+               >
+                 <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+               </button>
+             )}
+             <div className="space-y-2">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 bg-red-600/10 border border-red-600/30 rounded text-[9px] font-black uppercase text-red-500 mx-2">
+                  <Shield size={10} /> <span>Pioneer Program v1.0.2</span>
+                </div>
+                <h1 className="text-3xl md:text-6xl font-black uppercase tracking-tighter leading-none">{getPlanTitle(lang)}</h1>
+             </div>
           </div>
-          <button onClick={onClose} className="p-4 bg-white/5 hover:bg-red-600 rounded-full transition-all group">
+          <button onClick={onClose} className="p-4 bg-white/5 hover:bg-red-600 rounded-full transition-all group border border-white/10">
             <X size={24} className="group-hover:rotate-90 transition-transform" />
           </button>
         </div>
@@ -106,95 +116,120 @@ export const PioneerPlanDetail = ({ onClose, lang }: { onClose: () => void, lang
         {isApplying ? (
           <PioneerApplicationForm onClose={onClose} lang={lang} />
         ) : (
-          <div className="space-y-16 animate-in fade-in duration-700">
+          <div className="space-y-20 animate-in fade-in duration-700">
             {/* Overview Section */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-              <div className="md:col-span-7 space-y-6">
-                <h2 className="text-2xl font-black uppercase flex items-center space-x-3">
-                  <Info className="text-red-600 mx-2" /> <span>{sections[0].title}</span>
-                </h2>
-                <p className="text-gray-400 text-lg leading-relaxed">{sections[0].content}</p>
+              <div className="md:col-span-8 space-y-8">
+                <div className="space-y-6">
+                  <h2 className="text-3xl font-black uppercase flex items-center space-x-3">
+                    <Info className="text-red-600 mx-2" /> <span>{sections[0].title}</span>
+                  </h2>
+                  <p className="text-gray-400 text-xl leading-relaxed font-medium">{sections[0].content}</p>
+                </div>
+                
+                {/* Core Modules Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {sections[2].grid?.map((g, i) => {
+                    const GridIcon = g.icon;
+                    return (
+                      <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-3xl text-center group hover:border-red-600 transition-all hover:-translate-y-1">
+                        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-red-600/10 group-hover:text-red-600 transition-colors">
+                           <GridIcon size={24} />
+                        </div>
+                        <div className="font-black text-[10px] uppercase mb-1">{g.label}</div>
+                        <div className="text-[8px] text-gray-500 leading-tight uppercase font-bold">{g.desc}</div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="md:col-span-5 bg-red-600/5 border border-red-600/20 rounded-3xl p-8 text-center">
-                <Calendar className="mx-auto text-red-600 mb-4" size={48} />
-                <div className="text-3xl font-black">120 DAYS</div>
-                <div className="text-[10px] font-black uppercase text-gray-500 tracking-widest">{lang === 'zh' ? '总测试周期' : 'Total Test Cycle'}</div>
+
+              <div className="md:col-span-4 space-y-6">
+                 <div className="bg-red-600/5 border border-red-600/20 rounded-[3rem] p-10 text-center space-y-4">
+                    <Calendar className="mx-auto text-red-600 mb-2" size={40} />
+                    <div className="text-5xl font-black tracking-tighter">120 <span className="text-xl text-red-500">DAYS</span></div>
+                    <div className="text-[10px] font-black uppercase text-gray-500 tracking-[0.2em]">{lang === 'zh' ? '总测试周期' : 'TOTAL TEST CYCLE'}</div>
+                 </div>
+                 <div className="bg-white/5 border border-white/10 rounded-[3rem] p-8 flex flex-col items-center text-center">
+                    <Users className="text-gray-600 mb-4" size={32} />
+                    <div className="text-xs font-black uppercase tracking-widest text-white">Global Cohort</div>
+                    <div className="text-[9px] font-bold text-gray-600 uppercase mt-2">Limited to 1,000 Verified Pioneers</div>
+                 </div>
               </div>
             </div>
 
-            {/* Grid Sections */}
+            {/* List Sections */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 space-y-8">
-                <h2 className="text-xl font-black uppercase flex items-center space-x-3">
+              <div className="bg-white/[0.03] border border-white/5 rounded-[3.5rem] p-12 space-y-10 hover:bg-white/[0.05] transition-all">
+                <h2 className="text-2xl font-black uppercase flex items-center space-x-3">
                   <Users className="text-red-600 mx-2" /> <span>{sections[1].title}</span>
                 </h2>
-                <ul className="space-y-4">
+                <ul className="space-y-6">
                   {sections[1].items?.map((item, i) => (
-                    <li key={i} className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-4 text-sm text-gray-400`}>
-                      <CheckCircle2 className="text-red-600 shrink-0 mt-0.5" size={16} />
-                      <span>{item}</span>
+                    <li key={i} className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-4 text-sm font-medium text-gray-400 group`}>
+                      <div className="w-6 h-6 bg-red-600/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                        <CheckCircle2 size={14} />
+                      </div>
+                      <span className="group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 space-y-8">
-                <h2 className="text-xl font-black uppercase flex items-center space-x-3">
+              <div className="bg-white/[0.03] border border-white/5 rounded-[3.5rem] p-12 space-y-10 hover:bg-white/[0.05] transition-all">
+                <h2 className="text-2xl font-black uppercase flex items-center space-x-3">
                   <Award className="text-red-600 mx-2" /> <span>{sections[3].title}</span>
                 </h2>
-                <ul className="space-y-4">
+                <ul className="space-y-6">
                   {sections[3].items?.map((item, i) => (
-                    <li key={i} className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-4 text-sm text-gray-400`}>
-                      <div className="w-1.5 h-1.5 rounded-full bg-red-600 shrink-0 mt-1.5" />
-                      <span>{item}</span>
+                    <li key={i} className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-4 text-sm font-medium text-gray-400 group`}>
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-600 shrink-0 mt-2 shadow-[0_0_8px_rgba(232,33,39,0.8)]" />
+                      <span className="group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
-
-            {/* Core Modules Grid */}
-            <div className="space-y-8">
-              <h2 className="text-2xl font-black uppercase flex items-center space-x-3">
-                <Microscope className="text-red-600 mx-2" /> <span>{sections[2].title}</span>
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {sections[2].grid?.map((g, i) => {
-                  const GridIcon = g.icon;
-                  return (
-                    <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center group hover:border-red-600 transition-all">
-                      <GridIcon className="mx-auto mb-4 text-gray-500 group-hover:text-red-600 transition-colors" size={32} />
-                      <div className="font-black text-xs uppercase mb-2">{g.label}</div>
-                      <div className="text-[10px] text-gray-500 leading-tight uppercase">{g.desc}</div>
-                    </div>
-                  );
-                })}
               </div>
             </div>
 
             {/* CTA / NDA Section */}
-            <div className="border-t border-white/10 pt-16 text-center space-y-10">
-              <div className={`flex items-center justify-center space-x-4 ${isRTL ? 'space-x-reverse' : ''}`}>
-                <input 
-                  type="checkbox" 
-                  id="nda" 
-                  className="w-5 h-5 rounded border-gray-500 bg-transparent text-red-600 focus:ring-red-600"
-                  onChange={(e) => setHasAgreed(e.target.checked)}
-                />
-                <label htmlFor="nda" className="text-sm text-gray-400 font-bold uppercase tracking-widest cursor-pointer">
-                  {lang === 'zh' ? '我已阅读并同意遵守《保密协议》及《先锋计划条款》' : 'I have read and agree to the NDA and Pioneer Terms'}
-                </label>
+            <div className="border-t border-white/10 pt-20 text-center space-y-12">
+              <div className="max-w-2xl mx-auto space-y-8">
+                 <div className={`flex items-center justify-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <input 
+                      type="checkbox" 
+                      id="nda" 
+                      className="w-6 h-6 rounded-lg border-white/10 bg-white/5 text-red-600 focus:ring-red-600 cursor-pointer"
+                      onChange={(e) => setHasAgreed(e.target.checked)}
+                    />
+                    <label htmlFor="nda" className="text-sm text-gray-500 font-black uppercase tracking-[0.2em] cursor-pointer hover:text-white transition-colors">
+                      {lang === 'zh' ? '我已阅读并同意遵守《保密协议》及《先锋计划条款》' : 'I have read and agree to the NDA and Pioneer Terms'}
+                    </label>
+                 </div>
+                 
+                 <div className="bg-white/5 border border-white/10 p-10 rounded-[3rem] relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-red-600 animate-scan opacity-30" />
+                    <p className="text-xs text-gray-400 font-medium leading-relaxed uppercase tracking-wider mb-8">
+                       {lang === 'zh' ? '注意：提交申请即意味着您同意公开您的技术背景以供审核。' : 'Note: Submitting an application implies consent for technical background verification.'}
+                    </p>
+                    <button 
+                      onClick={() => setIsApplying(true)}
+                      disabled={!hasAgreed}
+                      className="px-24 py-7 bg-red-600 text-white font-black uppercase tracking-[0.4em] text-sm rounded-full hover:bg-white hover:text-black transition-all shadow-[0_20px_50px_rgba(232,33,39,0.3)] disabled:opacity-20 disabled:grayscale active:scale-95 flex items-center justify-center gap-4 mx-auto"
+                    >
+                      <Zap size={20} />
+                      {lang === 'zh' ? '启动申请序列' : 'INITIATE APPLICATION SEQUENCE'}
+                    </button>
+                 </div>
               </div>
-              <button 
-                onClick={() => setIsApplying(true)}
-                disabled={!hasAgreed}
-                className="px-20 py-6 bg-red-600 text-white font-black uppercase tracking-[0.3em] rounded-full hover:bg-white hover:text-black transition-all shadow-2xl disabled:opacity-30 disabled:grayscale"
-              >
-                {lang === 'zh' ? '提交加入申请' : 'Submit Application'}
-              </button>
-              <p className="text-[10px] text-gray-600 uppercase font-black tracking-widest">
-                CONFIDENTIAL DOCUMENT · TESLA INTERNAL ONLY · © 2025
-              </p>
+              
+              <div className="flex justify-center gap-12 opacity-20 grayscale grayscale-100">
+                 <div className="flex items-center gap-2">
+                    <Lock size={16} /> <span className="text-[10px] font-black uppercase tracking-widest">Orbital Encryption</span>
+                 </div>
+                 <div className="flex items-center gap-2">
+                    <Shield size={16} /> <span className="text-[10px] font-black uppercase tracking-widest">Confidential Protocol</span>
+                 </div>
+              </div>
             </div>
           </div>
         )}
