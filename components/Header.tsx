@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Globe, Radio, ChevronDown, Menu, X, Smartphone, Sun, Moon, Satellite } from 'lucide-react';
+import { Globe, Radio, ChevronDown, Menu, X, Smartphone, Sun, Moon } from 'lucide-react';
 import { ModelPiLogo } from '../Logo';
 import { CountdownTimer } from './CountdownTimer';
 
@@ -11,11 +11,11 @@ export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, i
 
   const tickerData = [
     "SATELLITE MESH: 14,204 ACTIVE",
-    "MARS RELAY: ONLINE (14.2m L)",
+    "MARS RELAY: ONLINE",
     "DOWNLINK: 14.8 GBPS",
     "GLOBAL LATENCY: 18MS",
-    "NEURAL LINK: ENCRYPTED",
-    "QUANTUM ENCLAVE: SECURE"
+    "NEURAL LINK: SECURE",
+    "BATTERY: SOLAR CHARGING"
   ];
 
   useEffect(() => {

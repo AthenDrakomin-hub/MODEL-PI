@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, ArrowLeft, ShieldCheck, CheckCircle, Zap, ChevronRight, FileText, Copy, Loader2, Lock, CreditCard, Terminal, Hash, Send, LockIcon, ExternalLink } from 'lucide-react';
+import { X, ArrowLeft, ShieldCheck, CheckCircle, Zap, ChevronRight, FileText, Copy, Loader2, CreditCard, Terminal, Hash, ExternalLink } from 'lucide-react';
 import { TRANSLATIONS } from '../translations';
 import { ModelPiLogo } from '../Logo';
 
@@ -15,32 +15,12 @@ const getSafeEnv = (key: string, fallback: string): string => {
 };
 
 const PERSONAL_CONFIG = {
-  USDT_TRC20_ADDR: getSafeEnv('VITE_USDT_ADDR', "请在 Vercel 设置 VITE_USDT_ADDR"),
+  USDT_TRC20_ADDR: getSafeEnv('VITE_USDT_ADDR', "T-ADDR-PENDING"),
   PAYPAL_ME_URL: getSafeEnv('VITE_PAYPAL_URL', "https://paypal.me/"),
   get USDT_QR() {
     return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(this.USDT_TRC20_ADDR)}`;
   }
 };
-
-const EncryptionOverlay = ({ stage }: { stage: string }) => (
-  <div className="absolute inset-0 z-[1100] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-12 text-center animate-in fade-in zoom-in duration-300">
-    <div className="relative mb-12">
-      <div className="absolute inset-0 bg-red-600/30 blur-3xl animate-pulse rounded-full" />
-      <div className="w-24 h-24 border-2 border-red-600 rounded-full flex items-center justify-center text-red-600 relative z-10">
-        <LockIcon size={40} className="animate-bounce" />
-      </div>
-    </div>
-    <div className="space-y-4">
-      <h3 className="text-2xl font-black uppercase tracking-widest text-white italic">{stage}</h3>
-      <div className="flex gap-1 justify-center">
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className="w-1.5 h-6 bg-red-600 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
-        ))}
-      </div>
-      <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.5em] mt-8">AES-512 SECURE CHANNEL</p>
-    </div>
-  </div>
-);
 
 export const DocumentModal = ({ activeDoc, lang, onClose }: any) => {
   if (!activeDoc) return null;
@@ -96,7 +76,6 @@ export const DocumentModal = ({ activeDoc, lang, onClose }: any) => {
 export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
   const [method, setMethod] = useState<'none' | 'crypto'>('none');
   const [isVerifying, setIsVerifying] = useState(false);
-  const [stage, setStage] = useState<string | null>(null);
   const [txid, setTxid] = useState('');
   const [email, setEmail] = useState('');
   const [copying, setCopying] = useState(false);
@@ -106,15 +85,10 @@ export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
     e.preventDefault();
     if (!txid.trim() || !email.trim()) return;
     setIsVerifying(true);
-    setStage("Verifying TXID...");
-    await new Promise(r => setTimeout(r, 1500));
-    setStage("Authenticating via Starlink...");
-    await new Promise(r => setTimeout(r, 1000));
-    setStage("Securing Pioneer Seat...");
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 2000));
     setDone(true);
     setIsVerifying(false);
-    setTimeout(onPaymentSuccess, 2000);
+    setTimeout(onPaymentSuccess, 1500);
   };
 
   if (!isOpen) return null;
@@ -127,43 +101,30 @@ export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
            <div className="space-y-12">
               <button onClick={onClose} className="flex items-center gap-3 text-white/40 hover:text-white transition-colors group">
                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                <span className="text-[10px] font-black uppercase tracking-widest">EXIT PORTAL</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">退出</span>
               </button>
               <div className="space-y-6">
-                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-white">OFFICIAL <br/><span className="text-red-600">RESERVATION.</span></h2>
-                <p className="text-gray-500 text-sm font-medium leading-relaxed uppercase">BATCH 01 Priority: High</p>
-              </div>
-              <div className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] space-y-6">
-                 <div className="flex items-center gap-4 text-white/60">
-                    <ShieldCheck size={20} className="text-red-600" />
-                    <span className="text-[10px] font-black uppercase">Official Chain-of-Custody</span>
-                 </div>
-                 <div className="flex items-center gap-4 text-white/60">
-                    <Zap size={20} className="text-red-600" />
-                    <span className="text-[10px] font-black uppercase">Instant Verification</span>
-                 </div>
+                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-white">抢占 <br/><span className="text-red-600">席位。</span></h2>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed uppercase">首批创始版，全球限量发售</p>
               </div>
            </div>
-           <p className="text-[9px] font-black uppercase text-gray-700 tracking-[0.4em] pt-12">SUPPORT: {CONTACT_EMAIL}</p>
+           <p className="text-[9px] font-black uppercase text-gray-700 tracking-[0.4em] pt-12">联系我们: {CONTACT_EMAIL}</p>
         </div>
 
         {/* Right Side Payment */}
         <div className="flex-1 bg-black p-8 md:p-24 flex flex-col justify-center items-center relative">
-          {isVerifying && stage && <EncryptionOverlay stage={stage} />}
-          
           <div className="w-full max-w-lg">
             {done ? (
               <div className="text-center space-y-8 animate-in zoom-in">
                  <div className="w-24 h-24 bg-red-600/10 border-2 border-red-600 rounded-full flex items-center justify-center mx-auto text-red-600 shadow-[0_0_50px_rgba(232,33,39,0.3)]">
                     <CheckCircle size={48} />
                  </div>
-                 <h3 className="text-3xl font-black uppercase text-white tracking-tighter italic">Pioneer Verified.</h3>
+                 <h3 className="text-3xl font-black uppercase text-white tracking-tighter italic">验证成功。</h3>
               </div>
             ) : method === 'none' ? (
               <div className="space-y-10">
                  <div className="text-center space-y-2">
-                    <h3 className="text-2xl font-black uppercase text-white tracking-tight">Select Settlement Method</h3>
-                    <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Encrypted Peer-to-Peer preferred</p>
+                    <h3 className="text-2xl font-black uppercase text-white tracking-tight">选择预订方式</h3>
                  </div>
                  <div className="grid gap-6">
                     <button onClick={() => setMethod('crypto')} className="p-10 bg-white rounded-[3rem] group hover:scale-[1.02] transition-all flex items-center justify-between">
@@ -171,7 +132,7 @@ export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
                           <Terminal className="text-black" size={32} />
                           <div className="text-left">
                              <div className="text-xl font-black uppercase text-black">USDT (TRC-20)</div>
-                             <div className="text-[9px] font-bold text-gray-400 uppercase">Instant Chain Sync</div>
+                             <div className="text-[9px] font-bold text-gray-400 uppercase">最快 1 分钟确认</div>
                           </div>
                        </div>
                        <ChevronRight className="text-black group-hover:translate-x-2 transition-transform" />
@@ -180,8 +141,8 @@ export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
                        <div className="flex items-center gap-6">
                           <CreditCard className="text-white/40" size={32} />
                           <div className="text-left">
-                             <div className="text-xl font-black uppercase text-white">Global Card</div>
-                             <div className="text-[9px] font-bold text-gray-600 uppercase">PayPal / Standard Settlement</div>
+                             <div className="text-xl font-black uppercase text-white">PayPal</div>
+                             <div className="text-[9px] font-bold text-gray-600 uppercase">支持全球信用卡</div>
                           </div>
                        </div>
                        <ExternalLink className="text-white/20" size={20} />
@@ -192,7 +153,7 @@ export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
               <div className="bg-white rounded-[4rem] p-10 md:p-14 space-y-8 text-black animate-in slide-in-from-bottom-12">
                  <div className="flex justify-between items-center">
                     <button onClick={() => setMethod('none')} className="p-3 hover:bg-gray-100 rounded-full"><ArrowLeft size={24}/></button>
-                    <div className="text-[10px] font-black uppercase text-red-600 tracking-widest">TRON NETWORK (TRC-20)</div>
+                    <div className="text-[10px] font-black uppercase text-red-600 tracking-widest">请转账至 TRC-20 地址</div>
                  </div>
                  <div className="flex justify-center">
                     <div className="p-4 bg-gray-50 border border-gray-100 rounded-3xl">
@@ -207,13 +168,13 @@ export const CheckoutModal = ({ isOpen, onClose, onPaymentSuccess }: any) => {
                        </button>
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-4">
-                       <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Reservation Email" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-xs focus:outline-none focus:border-red-600" />
+                       <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="预订邮箱" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-xs focus:outline-none focus:border-red-600" />
                        <div className="relative">
                           <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                          <input required value={txid} onChange={e=>setTxid(e.target.value)} placeholder="Transaction Hash (TXID)" className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-2xl text-xs font-mono focus:outline-none focus:border-red-600" />
+                          <input required value={txid} onChange={e=>setTxid(e.target.value)} placeholder="转账哈希 (TXID)" className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-2xl text-xs font-mono focus:outline-none focus:border-red-600" />
                        </div>
                        <button type="submit" disabled={isVerifying} className="w-full py-6 bg-red-600 text-white rounded-3xl font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:bg-black transition-all flex items-center justify-center gap-4">
-                          {isVerifying ? <Loader2 className="animate-spin" /> : <Zap size={18} />} Secure Pioneer Seat
+                          {isVerifying ? <Loader2 className="animate-spin" /> : <Zap size={18} />} 立即锁定名额
                        </button>
                     </form>
                  </div>
