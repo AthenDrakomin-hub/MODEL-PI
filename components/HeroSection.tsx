@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Zap, Globe, Activity, Car, Smartphone } from 'lucide-react';
+import { Zap, Car } from 'lucide-react';
 
-export const HeroSection = ({ t, stats, onOrder, theme }: any) => (
+export const HeroSection = ({ t, onOrder, theme }: any) => (
   <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Hero Section">
     {/* 视频背景 - Cinematic Starlink/Space background */}
     <div className="absolute inset-0 z-0 overflow-hidden">
@@ -25,7 +25,7 @@ export const HeroSection = ({ t, stats, onOrder, theme }: any) => (
       {/* 左侧文字 */}
       <div className="text-left space-y-6 md:space-y-10">
          <div className="inline-flex items-center gap-3 px-4 md:px-6 py-2 bg-red-600/10 border border-red-600/40 rounded-full">
-            <Zap size={12} className="text-red-500 animate-pulse md:size-14" />
+            <Zap className="text-red-500 animate-pulse w-3 h-3 md:w-4 md:h-4" />
             <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-red-500">Tesla Ecosystem Native</span>
          </div>
          
@@ -80,7 +80,7 @@ export const HeroSection = ({ t, stats, onOrder, theme }: any) => (
 
                   <div className="mt-auto flex flex-col items-center gap-3 md:gap-4">
                      <div className="w-10 h-10 md:w-14 md:h-14 bg-red-600 rounded-full flex items-center justify-center shadow-2xl border border-red-500 group-hover:scale-110 transition-transform duration-500">
-                        <Car className="text-white" size={20} md:size={24} />
+                        <Car className="text-white w-5 h-5 md:w-6 md:h-6" />
                      </div>
                      <div className="text-[9px] md:text-[10px] font-black text-white/80 uppercase tracking-widest drop-shadow-md">Hold to Summon</div>
                   </div>

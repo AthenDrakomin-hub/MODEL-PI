@@ -81,7 +81,7 @@ export const ComparisonSection = ({ t, theme }: any) => {
               
               <div className="pt-8 md:pt-12">
                  <div className="inline-flex items-center gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-red-500 animate-pulse">
-                    <ChevronRight size={12} md:size={14} /> Ready for the leap?
+                    <ChevronRight className="w-3 h-3 md:w-3.5 md:h-3.5" /> Ready for the leap?
                  </div>
               </div>
            </div>

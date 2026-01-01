@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { 
   X, Shield, Users, Target, Calendar, Award, 
-  CheckCircle2, Info, Satellite, Zap, Brain, Sun, Microscope,
-  ArrowLeft
+  CheckCircle2, Info, Satellite, Zap, Brain, Sun,
+  ArrowLeft, Lock as LucideLock
 } from 'lucide-react';
 import { PioneerApplicationForm } from './PioneerApplicationForm';
 
@@ -15,7 +15,7 @@ export const PioneerPlanDetail = ({ onClose, lang }: { onClose: () => void, lang
   const getPlanTitle = (l: string) => {
     switch (l) {
       case 'zh': return 'Tesla Model π 先锋计划';
-      case 'ja': return 'Tesla Model π パイオニア計画';
+      case 'ja': return 'Tesla Model π パイオニア计划';
       case 'ko': return 'Tesla Model π 파이오니어 플랜';
       case 'ru': return 'Программа Tesla Model π Pioneer';
       case 'ar': return 'برنامج تسلا موديل باي للرواد';
@@ -224,7 +224,7 @@ export const PioneerPlanDetail = ({ onClose, lang }: { onClose: () => void, lang
               
               <div className="flex justify-center gap-12 opacity-20 grayscale grayscale-100">
                  <div className="flex items-center gap-2">
-                    <Lock size={16} /> <span className="text-[10px] font-black uppercase tracking-widest">Orbital Encryption</span>
+                    <LucideLock size={16} /> <span className="text-[10px] font-black uppercase tracking-widest">Orbital Encryption</span>
                  </div>
                  <div className="flex items-center gap-2">
                     <Shield size={16} /> <span className="text-[10px] font-black uppercase tracking-widest">Confidential Protocol</span>

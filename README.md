@@ -1,20 +1,60 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
-# Run and deploy your AI Studio app
+# 🚀 Tesla Model Pi 网页上线保姆级教程
 
-This contains everything you need to run your app locally.
+这个项目是一个展示特斯拉手机概念的网页。虽然它是“概念版”，但为了让它在网上跑起来（比如 AI 聊天、预订功能），你需要按照下面的步骤操作。
 
-View your app in AI Studio: https://ai.studio/apps/drive/1Eu4GAtvw9Z24cRfdFAvpQpKjfV7r9cjh
+---
 
-## Run Locally
+## 🛠️ 第一步：你需要准备什么？
 
-**Prerequisites:**  Node.js
+1.  **代码仓库**：把这些代码传到你的 GitHub。
+2.  **API 密钥**：去 [Google AI Studio](https://aistudio.google.com/) 免费申请一个 `API_KEY`。没有它，网页里的 AI 助手就是个摆设。
+3.  **Vercel 账号**：推荐用 Vercel 部署，因为又快又稳，还免费。
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 🔑 第二步：环境变量（最关键！）
+
+在 Vercel 部署的时候，必须在 **Settings -> Environment Variables** 填入这几个东西，否则网页会报错：
+
+| 名字 | 是否必须 | 干嘛用的 |
+| :--- | :--- | :--- |
+| `API_KEY` | **是** | Google Gemini 的密钥，AI 聊天的动力来源。 |
+| `VITE_USDT_ADDR` | **是** | 你的收钱地址（USDT TRC-20），会显示在支付弹窗里。 |
+| `VITE_PAYPAL_URL` | 否 | 你的 PayPal 链接，不填的话支付页面会少个选项。 |
+
+---
+
+## 📦 第三步：怎么发布？
+
+1.  **关联仓库**：在 Vercel 选你的 GitHub 项目。
+2.  **填好变量**：把上面的 `API_KEY` 填进去。
+3.  **点下 Deploy**：等一两分钟，你的网页就上线了。
+
+---
+
+## 🔧 第四步：本地调试（如果你想改代码）
+
+如果你想在自己电脑上先试试：
+
+```bash
+# 1. 装插件
+npm install
+
+# 2. 建立一个 .env 文件
+# 在里面写上 API_KEY=你的密钥
+
+# 3. 跑起来
+npm run dev
+```
+
+---
+
+## ⚠️ 避坑指南
+
+-   **报错 TS2322/TS2786**：我已经帮你修好了这些 TypeScript 的报错（图标大小和命名冲突）。
+-   **预订数据去哪了**：为了省事，所有预订信息都存在用户的浏览器里（localStorage）。这意味着你刷新或者换个电脑，之前的预订记录就“消失”了。
+-   **AI 不说话**：检查你的 `API_KEY` 是否有效，并且确认你没有在不支持 Gemini 的地区直接访问（可能需要梯子或者配置代理）。
+
+---
+*祝你的 Model Pi 网页大火！*

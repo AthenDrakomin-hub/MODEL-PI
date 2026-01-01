@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { CreditCard, Check, Zap, Wifi, Smartphone, Radio, Satellite, ShieldCheck, Star, Activity, Shield, RefreshCcw } from 'lucide-react';
+import { CreditCard, Check, Zap, ShieldCheck, Shield, RefreshCcw } from 'lucide-react';
 import { CountdownTimer } from './CountdownTimer';
 import { ModelPiLogo } from '../Logo';
 
@@ -73,7 +73,7 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder, theme }: any)
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12 md:mb-24">
            <div className="inline-flex items-center space-x-3 px-4 md:px-6 py-2 bg-red-600/10 border border-red-600/30 rounded-full mb-8 md:mb-12">
-              <Shield size={12} className="text-red-500" />
+              <Shield className="w-3 h-3 text-red-500" />
               <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-red-500">Tesla Official Global Pre-order Portal</span>
            </div>
            <div className="flex justify-center transform scale-[0.85] sm:scale-100">
@@ -179,14 +179,14 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder, theme }: any)
             {/* Reassurance Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                <div className="bg-white/5 border border-white/10 p-6 md:p-8 rounded-2xl md:rounded-3xl flex items-start gap-4">
-                  <RefreshCcw className="text-red-600 shrink-0" size={20} md:size={24} />
+                  <RefreshCcw className="w-5 h-5 md:w-6 md:h-6 text-red-600 shrink-0" />
                   <div>
                     <div className="text-[10px] md:text-xs font-black uppercase mb-1">Risk-Free Order</div>
                     <p className="text-[8px] md:text-[10px] text-gray-500 font-medium leading-relaxed">正式交付前随时可退，定金全额原路返还。</p>
                   </div>
                </div>
                <div className="bg-white/5 border border-white/10 p-6 md:p-8 rounded-2xl md:rounded-3xl flex items-start gap-4">
-                  <ShieldCheck className="text-red-600 shrink-0" size={20} md:size={24} />
+                  <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-red-600 shrink-0" />
                   <div>
                     <div className="text-[10px] md:text-xs font-black uppercase mb-1">Official Warranty</div>
                     <p className="text-[8px] md:text-[10px] text-gray-500 font-medium leading-relaxed">2年全球联保，特斯拉售后中心直供保障。</p>
@@ -204,7 +204,7 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder, theme }: any)
                       className={`relative aspect-square rounded-[1.8rem] sm:rounded-[2.2rem] md:rounded-[2.5rem] border-2 transition-all duration-500 p-1.5 md:p-2 ${selectedColor === key ? 'border-red-600 scale-105 shadow-2xl' : 'border-white/5 hover:border-white/20'}`}
                     >
                       <div className="w-full h-full rounded-[1.2rem] sm:rounded-[1.5rem] md:rounded-[1.8rem]" style={{ background: config.frame }} />
-                      {selectedColor === key && <div className="absolute inset-0 flex items-center justify-center"><Check className="text-white" size={20} md:size={24} /></div>}
+                      {selectedColor === key && <div className="absolute inset-0 flex items-center justify-center"><Check className="w-5 h-5 md:w-6 md:h-6 text-white" /></div>}
                     </button>
                   ))}
                </div>
@@ -218,12 +218,12 @@ export const BookingSection = ({ t, stats, endTime, lang, onOrder, theme }: any)
                 </div>
                 <div className="bg-white/5 px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border border-white/10">
                    <span className="text-green-500 font-black text-[9px] md:text-[10px] uppercase tracking-widest flex items-center gap-2">
-                     <CreditCard size={12}/> Standard Pay Available
+                     <CreditCard className="w-3 h-3"/> Standard Pay Available
                    </span>
                 </div>
               </div>
               <button onClick={onOrder} className="w-full py-6 md:py-8 bg-red-600 text-white rounded-2xl md:rounded-[2rem] font-black uppercase text-xs md:text-sm tracking-[0.4em] md:tracking-[0.5em] hover:bg-white hover:text-black transition-all shadow-4xl flex items-center justify-center gap-3 md:gap-4 active:scale-95 group">
-                <Zap size={18} md:size={20} />
+                <Zap className="w-4 h-4 md:w-5 md:h-5" />
                 <span>{t.hero.orderNow}</span>
               </button>
               <div className="text-center">

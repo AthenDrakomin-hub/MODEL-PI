@@ -70,7 +70,7 @@ export const WhitepaperSection = ({ t, lang, onOpenFull }: any) => {
                   return (
                     <article key={i} className="bg-white/[0.03] border border-white/5 p-6 md:p-8 rounded-2xl md:rounded-3xl hover:bg-white/[0.05] transition-all group">
                       <div className="flex items-center space-x-2 mb-3 text-red-500">
-                        <Icon size={14} className="md:size-4" />
+                        <Icon className="w-4 h-4" />
                         <h3 className="text-[9px] md:text-[10px] font-black uppercase text-gray-500 tracking-wider">{spec.label}</h3>
                       </div>
                       <div className="text-lg md:text-xl font-black uppercase mb-1 leading-tight">{spec.value}</div>
