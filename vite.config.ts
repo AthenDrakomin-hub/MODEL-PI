@@ -1,18 +1,28 @@
 
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
-  plugins: [react()],
-  define: {
-    'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
-  },
-  server: {
-    port: 3000
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: false
-  }
+export default defineConfig(({ mode }) => {
+  // 注入环境变量，确保在不同平台（Vercel, Local）一致性
+  const env = loadEnv(mode, (process as any).cwd(), '');
+  
+  return {
+    plugins: [react()],
+    define: {
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
+      'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV || 'production'),
+      'process.env.VITE_USDT_ADDR': JSON.stringify(env.VITE_USDT_ADDR || ''),
+      'process.env.VITE_PAYPAL_URL': JSON.stringify(env.VITE_PAYPAL_URL || ''),
+      // 同时也注入到 import.meta.env
+      'import.meta.env.VITE_USDT_ADDR': JSON.stringify(env.VITE_USDT_ADDR || ''),
+      'import.meta.env.VITE_PAYPAL_URL': JSON.stringify(env.VITE_PAYPAL_URL || '')
+    },
+    server: {
+      port: 3000
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: false
+    }
+  };
 });

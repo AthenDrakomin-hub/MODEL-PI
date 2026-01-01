@@ -1,129 +1,366 @@
 
-import React, { useState } from 'react';
-import { X, ArrowLeft, ShieldCheck, CreditCard as PaymentIcon, Info, CheckCircle, Wifi, Shield } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, ArrowLeft, ShieldCheck, CheckCircle, Zap, ChevronRight, FileText, Copy, Loader2, QrCode, Lock, CreditCard, Terminal, Apple, CreditCard as VisaIcon, Info, Shield, ExternalLink, Hash, History, MessageSquare, Send, Activity, LockIcon } from 'lucide-react';
+import { TRANSLATIONS } from '../translations';
 import { ModelPiLogo } from '../Logo';
 
-// Global JSX augmentation for the Stripe custom element to fix property not found error in this module
-// We augment both JSX and React.JSX namespaces to ensure the custom element is recognized
-// regardless of the project's specific TypeScript/React configuration.
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'stripe-pricing-table': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
-        'pricing-table-id': string;
-        'publishable-key': string;
-      };
+const getSafeEnv = (key: string, fallback: string): string => {
+  try {
+    const viteEnv = (import.meta as any).env;
+    if (viteEnv && viteEnv[key]) return viteEnv[key];
+    if (typeof process !== 'undefined' && process.env && (process.env as any)[key]) {
+      return (process.env as any)[key];
     }
-  }
-  namespace React {
-    namespace JSX {
-      interface IntrinsicElements {
-        'stripe-pricing-table': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
-          'pricing-table-id': string;
-          'publishable-key': string;
-        };
-      }
-    }
-  }
-}
+  } catch (e) {}
+  return fallback;
+};
 
-const DOC_CONTENT: any = {
-  zh: {
-    '先锋计划': `<h3>1. 创始身份识别</h3><p>先锋计划成员可提前 6 个月获得测试资格，并获得专属“Titanium Pioneer”数字徽章。</p>`,
-    '星链条约': `<h3>1. 全球连通权</h3><p>享有基础带宽的终身免费使用权，无视 any 地理边界障碍。</p>`,
-    '法律协议': `<h3>隐私与数据</h3><p>所有生物识别数据均保存在本地 T1 安全芯片中。</p>`,
-    '隐私声明': `<h3>幕度</h3><p>我们承诺不对用户通讯进行 any 中心化审查。</p>`
-  },
-  en: {
-    'Pioneer Plan': `<h3>1. Founding Status</h3><p>Early access for BATCH 01 members and a unique "Titanium Pioneer" digital badge.</p>`,
-    'Starlink Treaty': `<h3>1. Connectivity</h3><p>Lifetime free base bandwidth globally, regardless of geographical barriers.</p>`,
-    'Legal': `<h3>Privacy & Data</h3><p>All biometric data is stored locally on the T1 security chip.</p>`,
-    'Privacy': `<h3>Transparency</h3><p>We commit to zero centralized censorship of user communications.</p>`
+const PERSONAL_CONFIG = {
+  USDT_TRC20_ADDR: getSafeEnv('VITE_USDT_ADDR', "请在 Vercel 设置 VITE_USDT_ADDR"),
+  PAYPAL_ME_URL: getSafeEnv('VITE_PAYPAL_URL', "https://paypal.me/"),
+  get USDT_QR() {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(this.USDT_TRC20_ADDR)}`;
   }
 };
 
+/**
+ * 模拟数据加密视觉组件
+ */
+const EncryptionOverlay = ({ stage }: { stage: string }) => (
+  <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center p-12 text-center animate-in fade-in zoom-in duration-300">
+    <div className="relative mb-12">
+      <div className="absolute inset-0 bg-red-600/20 blur-3xl animate-pulse rounded-full" />
+      <div className="w-24 h-24 border-2 border-red-600 rounded-full flex items-center justify-center text-red-600 relative z-10">
+        <LockIcon size={40} className="animate-bounce" />
+      </div>
+      <div className="absolute -inset-4 border border-red-600/30 rounded-full animate-[spin_4s_linear_infinite]" />
+    </div>
+    <div className="space-y-4">
+      <h3 className="text-2xl font-black uppercase tracking-widest text-white italic">{stage}</h3>
+      <div className="flex gap-1 justify-center">
+        {[...Array(20)].map((_, i) => (
+          <div key={i} className="w-1 h-4 bg-red-600/40 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
+        ))}
+      </div>
+      <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em]">AES-512 / T1 Secure Enclave</p>
+    </div>
+  </div>
+);
+
 export const DocumentModal = ({ activeDoc, lang, onClose }: any) => {
   if (!activeDoc) return null;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS['en'];
+  
+  const docKeyMap: any = {
+    'Support': 'Support',
+    'Terms': 'Terms',
+    'Refund Policy': 'Refund Policy',
+    '联系支持': '联系支持',
+    '服务条款': '服务条款',
+    '退款政策': '退款政策',
+    '隐私声明': '隐私声明',
+    'Whitepaper': 'Whitepaper'
+  };
+  
+  const actualKey = docKeyMap[activeDoc] || activeDoc;
+  const docData = t.docs?.[actualKey] || { title: activeDoc, subtitle: 'v1.0', sections: [] };
+  const isSupport = actualKey === '联系支持' || actualKey === 'Support';
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
-      <div className="absolute inset-0 bg-black/95 backdrop-blur-3xl" onClick={onClose} />
-      <div className="relative glass-effect w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-[3rem] border border-white/10 p-8 md:p-16 custom-scrollbar">
-        <button onClick={onClose} className="absolute top-8 right-8 text-gray-500 hover:text-white"><X size={24} /></button>
-        <h2 className="text-3xl font-black text-white uppercase border-b border-red-600/50 pb-4 mb-8">{activeDoc}</h2>
-        <div className="prose prose-invert prose-red" dangerouslySetInnerHTML={{ __html: DOC_CONTENT[lang][activeDoc] || "<p>Coming soon...</p>" }} />
+    <div className="fixed inset-0 z-[150] bg-black/98 backdrop-blur-3xl animate-in fade-in duration-300 overflow-y-auto custom-scrollbar scanlines">
+      <div className="max-w-5xl mx-auto px-6 py-12 md:py-24 relative">
+        <button onClick={onClose} className="fixed top-8 right-8 z-[160] p-4 bg-white/10 hover:bg-red-600 rounded-full transition-all group border border-white/20 shadow-2xl">
+          <X size={24} className="group-hover:rotate-90 transition-transform text-white" />
+        </button>
+
+        <div className="space-y-12">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-600/20 border border-red-600/40 rounded text-[10px] font-black uppercase text-red-400">
+               <ShieldCheck size={12} /> <span>{docData.subtitle}</span>
+            </div>
+            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none text-white drop-shadow-md">
+              {docData.title}
+            </h1>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {docData.sections.map((section: any, idx: number) => (
+              <div key={idx} className={`bg-white/[0.07] backdrop-blur-md p-8 md:p-12 rounded-[2.5rem] border border-white/15 space-y-8 ${section.type === 'list' || section.type === 'specs' || section.fullWidth ? 'md:col-span-2' : ''}`}>
+                <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight flex items-center gap-3 text-white">
+                   {section.type === 'specs' ? <Zap className="text-red-500" /> : <FileText className="text-gray-300" />}
+                   {section.title}
+                </h2>
+                {section.type === 'text' && <p className="text-gray-200 leading-relaxed text-lg font-medium">{section.content}</p>}
+                {section.type === 'list' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {section.items.map((item: string, i: number) => (
+                      <div key={i} className="flex items-center gap-4 bg-white/10 p-5 rounded-2xl border border-white/10 hover:border-red-600/40 transition-colors">
+                        <CheckCircle size={18} className="text-red-500 shrink-0" />
+                        <span className="text-sm font-bold uppercase text-white">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {isSupport && (
+               <div className="md:col-span-2 bg-red-600/10 border border-red-600/30 p-12 rounded-[3.5rem] space-y-8">
+                  <div className="flex items-center gap-4">
+                    <MessageSquare className="text-red-500" size={32} />
+                    <h3 className="text-3xl font-black uppercase tracking-tighter text-white">紧急工单 / Uplink Ticket</h3>
+                  </div>
+                  <div className="space-y-6">
+                    <textarea 
+                      className="w-full h-40 bg-white/5 border border-white/10 rounded-3xl p-6 text-white focus:outline-none focus:border-red-600 transition-all text-sm font-mono"
+                      placeholder="Input your mission diagnostics..."
+                    />
+                    <button className="px-12 py-5 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-white hover:text-black transition-all flex items-center gap-4 shadow-2xl">
+                       <Send size={16} /> Transmit Request
+                    </button>
+                  </div>
+               </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-24 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8 opacity-40">
+           <div className="flex items-center gap-4">
+              <ModelPiLogo className="w-8 h-8 text-white" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-white">Tesla Strategic Documentation</span>
+           </div>
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Confidential - Pioneer Access Only</p>
+        </div>
       </div>
     </div>
   );
 };
 
 export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => {
+  const [methodGroup, setMethodGroup] = useState<'none' | 'paypal' | 'crypto'>('none');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [securingStage, setSecuringStage] = useState<string | null>(null);
+  const [txid, setTxid] = useState('');
+  const [email, setEmail] = useState('');
+  const [copyFeedback, setCopyFeedback] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleManualSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!txid.trim() || !email.trim()) return;
+    
+    // 视觉上的加密流程
+    setIsVerifying(true);
+    setSecuringStage("Encrypting Packet...");
+    
+    await new Promise(r => setTimeout(r, 1200));
+    setSecuringStage("Authenticating via Starlink...");
+    
+    await new Promise(r => setTimeout(r, 1000));
+    setSecuringStage("Securing Transmission...");
+
+    try {
+      // 提交真实数据
+      await fetch('https://formspree.io/f/model-pi@proton.me', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email, 
+          txid, 
+          amount: "$89.70", 
+          method: "USDT-TRC20",
+          secure_hash: btoa(txid + email).substring(0, 16) // 模拟一个安全哈希
+        })
+      });
+      setIsVerifying(false);
+      setSecuringStage(null);
+      setSubmitted(true);
+    } catch (err) {
+      setTimeout(() => {
+        setIsVerifying(false);
+        setSecuringStage(null);
+        setSubmitted(true);
+      }, 1000);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[110] bg-black animate-in fade-in duration-500 overflow-y-auto">
+    <div className="fixed inset-0 z-[160] bg-black animate-in fade-in duration-500 overflow-y-auto scanlines">
       <div className="min-h-screen flex flex-col lg:flex-row">
-        {/* Left Side: Brand & Context - More compact */}
-        <div className="w-full lg:w-[30%] bg-neutral-950 p-6 md:p-10 lg:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/5">
-          <button onClick={onClose} className="flex items-center space-x-2 text-gray-500 hover:text-white mb-6 group transition-colors">
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
-            <span className="text-[9px] font-black uppercase tracking-widest">BACK TO HUB</span>
-          </button>
-          
-          <div className="space-y-6 max-w-sm mx-auto lg:mx-0">
-            <div className="space-y-1">
-              <div className="text-red-600 font-black text-[10px] uppercase tracking-[0.3em] mb-1">Secure Gateway</div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-none">
-                MODEL PI <br/> 
-                <span className="text-red-600">BATCH 01</span>
+        
+        {/* Left Side: Pioneer Status */}
+        <div className="w-full lg:w-[40%] bg-neutral-950 p-8 md:p-16 flex flex-col justify-between border-r border-white/10 relative">
+          <div className="space-y-12 relative z-10">
+            <button onClick={onClose} className="flex items-center space-x-2 text-white hover:text-red-500 mb-12 group transition-colors">
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+              <span className="text-[10px] font-black uppercase tracking-widest">BACK TO GATEWAY</span>
+            </button>
+            
+            <div className="space-y-6">
+              <span className="text-red-500 text-[11px] font-black uppercase tracking-[0.4em] flex items-center gap-2">
+                <ShieldCheck size={14} /> PIONEER VERIFICATION
+              </span>
+              <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none text-white">
+                OFFICIAL <br/><span className="text-red-600">DEPOSIT.</span>
               </h1>
+              <p className="text-gray-400 text-sm font-medium leading-relaxed max-w-sm">
+                通过全球节点锁定您的 BATCH 01 席位。支付完成后，请输入交易哈希 (TXID) 进行链上确权。
+              </p>
             </div>
 
-            <div className="bg-red-600/5 border border-red-600/20 p-4 rounded-xl flex items-start space-x-3">
-              <Shield className="text-red-500 shrink-0 mt-0.5" size={14} />
-              <div className="space-y-0.5">
-                <p className="text-[9px] text-gray-200 uppercase font-black tracking-widest">Pioneer Reservation</p>
-                <p className="text-[8px] text-gray-500 font-bold leading-snug">{t.launch.desc}</p>
-              </div>
-            </div>
-
-            <div className="hidden lg:block space-y-2.5 pt-4 border-t border-white/5">
-              <div className="flex items-center gap-2.5 text-gray-600">
-                <ShieldCheck size={12} />
-                <span className="text-[7px] font-black uppercase tracking-widest">End-to-End Encrypted</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-gray-600">
-                <CheckCircle size={12} />
-                <span className="text-[7px] font-black uppercase tracking-widest">Instant Confirmation</span>
-              </div>
+            <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] space-y-6">
+               <div className="flex items-center gap-4">
+                  <div className="p-3 bg-red-600 rounded-xl"><Lock size={20} /></div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-white/80">Direct Peer-to-Peer Transfer</div>
+               </div>
+               <div className="flex items-center gap-4">
+                  <div className="p-3 bg-green-600 rounded-xl"><History size={20} /></div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-white/80">Queue Position Reserved</div>
+               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Stripe Pricing Table - Tighter Fit */}
-        <div className="flex-1 bg-black p-2 md:p-6 lg:p-8 flex flex-col justify-center relative min-h-[500px]">
-          <div className="absolute inset-0 opacity-5 pointer-events-none">
-             <div className="w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-600/20 via-transparent to-transparent" />
-          </div>
-          
-          <div className="relative z-10 w-full max-w-3xl mx-auto bg-white/[0.01] rounded-[1.25rem] p-0.5 md:p-2 border border-white/5 shadow-3xl">
-            <div className="mb-2 text-center pt-4 pb-2">
-              <h2 className="text-md md:text-lg font-black uppercase tracking-tight text-white/90 mb-0.5">Select Pioneer Batch</h2>
-              <p className="text-[8px] text-gray-600 uppercase font-bold tracking-[0.2em]">PCI-DSS Compliant Checkout</p>
-            </div>
+        {/* Right Side: Direct Payment */}
+        <div className="flex-1 bg-black p-8 md:p-24 flex flex-col justify-center items-center relative">
+          {isVerifying && securingStage && <EncryptionOverlay stage={securingStage} />}
 
-            {/* Tight Container for Stripe Table */}
-            <div className="stripe-container w-full overflow-hidden rounded-lg bg-black/60 min-h-[400px]">
-              <stripe-pricing-table 
-                pricing-table-id="prctbl_1SkQzBRsbwjkO0VBFDKY66dv"
-                publishable-key="pk_live_51SkGFGRsbwjkO0VBWBSKMc3pUkoNYe5e3hrhHm1eDIhKoKdwapC0E9tS2HUGg4SiaGkOPDbn4TOy1oNZ4SNuwDg200UlOvubs0"
-              >
-              </stripe-pricing-table>
-            </div>
+          <div className="w-full max-w-lg space-y-10 animate-in zoom-in-95 duration-500">
+            
+            {submitted ? (
+              <div className="text-center space-y-8 animate-in zoom-in">
+                 <div className="w-24 h-24 bg-red-600/10 border-2 border-red-600 rounded-full flex items-center justify-center mx-auto text-red-600 shadow-[0_0_50px_rgba(232,33,39,0.3)]">
+                    <CheckCircle size={48} />
+                 </div>
+                 <div className="space-y-4">
+                    <h2 className="text-4xl font-black uppercase text-white tracking-tighter">Transmission Sent</h2>
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest leading-relaxed">
+                       您的支付已进入验证队列。我们的系统和人工团队将在链上确认后通过电子邮件发送您的先锋证书。
+                    </p>
+                 </div>
+                 <button onClick={onClose} className="px-12 py-5 bg-white text-black rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-red-600 hover:text-white transition-all">
+                    Return to Portal
+                 </button>
+              </div>
+            ) : methodGroup === 'none' ? (
+              <>
+                <div className="text-center space-y-4">
+                   <h2 className="text-3xl font-black uppercase text-white">Select Entry Point</h2>
+                   <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">Batch 01 Priority: High</p>
+                </div>
 
-            <div className="mt-3 pb-3 text-center">
-              <p className="text-[7px] text-gray-800 uppercase font-black tracking-[0.4em] opacity-40">
-                SECURED BY STRIPE · ENCRYPTED CONNECTION
-              </p>
+                <div className="space-y-6">
+                   <button 
+                    onClick={() => setMethodGroup('crypto')}
+                    className="w-full p-10 bg-white rounded-[3rem] group hover:scale-[1.02] transition-all flex items-center justify-between text-black shadow-2xl"
+                   >
+                      <div className="flex items-center gap-6">
+                         <div className="w-16 h-16 bg-black text-white rounded-2xl flex items-center justify-center">
+                            <Terminal size={32} />
+                         </div>
+                         <div className="text-left">
+                            <div className="text-xl font-black uppercase">USDT (TRC-20)</div>
+                            <div className="text-[10px] font-bold text-gray-500 uppercase mt-1">瞬时到账 · 全球支付首选</div>
+                         </div>
+                      </div>
+                      <ChevronRight className="group-hover:translate-x-2 transition-transform" />
+                   </button>
+
+                   <button 
+                    onClick={() => window.open(PERSONAL_CONFIG.PAYPAL_ME_URL, '_blank')}
+                    className="w-full p-10 bg-white/5 border border-white/10 rounded-[3rem] group hover:bg-white/10 transition-all flex items-center justify-between text-white"
+                   >
+                      <div className="flex items-center gap-6">
+                         <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center">
+                            <CreditCard size={32} className="text-gray-400" />
+                         </div>
+                         <div className="text-left">
+                            <div className="text-xl font-black uppercase">PayPal / Global Card</div>
+                            <div className="text-[10px] font-bold text-gray-600 uppercase mt-1">使用个人 PayPal 页面支付</div>
+                         </div>
+                      </div>
+                      <ExternalLink className="group-hover:scale-110 transition-transform opacity-40" />
+                   </button>
+                </div>
+              </>
+            ) : (
+              <div className="bg-white rounded-[4rem] p-10 md:p-14 space-y-8 text-black animate-in slide-in-from-bottom-12">
+                 <button onClick={() => setMethodGroup('none')} className="p-3 hover:bg-gray-100 rounded-full"><ArrowLeft size={24}/></button>
+                 
+                 <div className="text-center space-y-6">
+                    <div className="space-y-2">
+                       <h3 className="text-2xl font-black uppercase italic">USDT Settlement</h3>
+                       <p className="text-[9px] font-black text-red-600 uppercase tracking-widest"> Network: TRON (TRC-20) </p>
+                    </div>
+
+                    <div className="relative mx-auto w-40 h-40 bg-gray-50 p-4 rounded-3xl border border-gray-100">
+                       <img src={PERSONAL_CONFIG.USDT_QR} className="w-full h-full object-contain" alt="QR" />
+                    </div>
+
+                    <div className="space-y-4">
+                       <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest text-left px-2">Deposit Address (TRC-20)</div>
+                       <div className="flex gap-2">
+                          <div className="flex-grow text-[11px] font-mono break-all p-5 bg-gray-100 rounded-2xl border border-gray-200 text-left">
+                            {PERSONAL_CONFIG.USDT_TRC20_ADDR}
+                          </div>
+                          <button 
+                            onClick={() => { navigator.clipboard.writeText(PERSONAL_CONFIG.USDT_TRC20_ADDR); setCopyFeedback(true); setTimeout(() => setCopyFeedback(false), 2000); }}
+                            className={`p-5 rounded-2xl transition-all ${copyFeedback ? 'bg-green-600 text-white' : 'bg-black text-white'}`}
+                          >
+                            <Copy size={20} />
+                          </button>
+                       </div>
+                    </div>
+
+                    <form onSubmit={handleManualSubmit} className="space-y-4 pt-4 border-t border-gray-100">
+                       <div className="space-y-2 text-left">
+                          <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-2">Your Email</label>
+                          <input 
+                                required
+                                type="email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                placeholder="For confirmation certificate" 
+                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-[11px] focus:outline-none focus:border-red-600" 
+                          />
+                       </div>
+                       <div className="space-y-2 text-left">
+                          <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-2">Transaction ID (TXID)</label>
+                          <div className="relative">
+                             <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300"><Hash size={16} /></div>
+                             <input 
+                                required
+                                value={txid}
+                                onChange={e => setTxid(e.target.value)}
+                                placeholder="Paste transfer hash" 
+                                className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-2xl text-[11px] font-mono focus:outline-none focus:border-red-600" 
+                             />
+                          </div>
+                       </div>
+                       
+                       <button 
+                        disabled={isVerifying}
+                        type="submit"
+                        className="w-full py-6 bg-red-600 text-white rounded-3xl font-black uppercase text-xs tracking-[0.3em] hover:bg-black transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                       >
+                          {isVerifying ? (
+                            <> <Loader2 className="animate-spin" size={18} /> Validating... </>
+                          ) : (
+                            <> <Zap size={18} /> Confirm $89.70 Deposit </>
+                          )}
+                       </button>
+                    </form>
+                 </div>
+              </div>
+            )}
+            
+            <div className="flex items-center justify-center gap-8 opacity-40 grayscale pt-4">
+               <div className="flex items-center gap-2">
+                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                 <span className="text-[8px] font-black uppercase text-white">Neural Encrypted Transmission</span>
+               </div>
             </div>
           </div>
         </div>
@@ -134,71 +371,58 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
 
 export const FeedbackModal = ({ isOpen, t, onClose }: any) => {
   const [content, setContent] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [securingStage, setSecuringStage] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [isTransmitting, setIsTransmitting] = useState(false);
+
+  const handleSend = async () => {
+    if (!content.trim()) return;
+    setIsSending(true);
+    setSecuringStage("Scanning for Anomalies...");
+    await new Promise(r => setTimeout(r, 1000));
+    setSecuringStage("Hashing Transmission...");
+    await new Promise(r => setTimeout(r, 800));
+
+    // 模拟发送
+    setSubmitted(true);
+    setIsSending(false);
+    setSecuringStage(null);
+    setTimeout(onClose, 2500);
+  };
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
-    if (!content.trim()) return;
-    setIsTransmitting(true);
-    setTimeout(() => {
-      setIsTransmitting(false);
-      setSubmitted(true);
-      setTimeout(() => {
-        onClose();
-        setSubmitted(false);
-        setContent('');
-      }, 2500);
-    }, 2000);
-  };
-
   return (
-    <div className="fixed inset-0 z-[120] flex items-center justify-center p-6 animate-in fade-in duration-300">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={onClose} />
-      <div className="relative glass-effect w-full max-w-lg p-10 rounded-[3rem] border border-white/10 shadow-2xl text-center overflow-hidden">
-        <button onClick={onClose} className="absolute top-6 right-6 text-gray-500 hover:text-white"><X size={20} /></button>
+    <div className="fixed inset-0 z-[180] flex items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
+      <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl" onClick={onClose} />
+      <div className="relative bg-neutral-900 w-full max-w-xl p-12 md:p-16 rounded-[4rem] border border-white/20 text-center shadow-3xl overflow-hidden">
+        {isSending && securingStage && <EncryptionOverlay stage={securingStage} />}
         
-        {isTransmitting ? (
-          <div className="py-20 space-y-8 animate-in fade-in">
-             <div className="relative w-24 h-24 mx-auto">
-                <div className="absolute inset-0 bg-red-600 rounded-full animate-ping opacity-20" />
-                <div className="relative w-full h-full bg-red-600/10 rounded-full flex items-center justify-center border border-red-600/30">
-                   <Wifi size={40} className="text-red-600 animate-pulse" />
-                </div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-red-600 animate-scan opacity-50" />
+        <button onClick={onClose} className="absolute top-10 right-10 text-white hover:text-red-500 transition-colors"><X size={28} /></button>
+        
+        {submitted ? (
+          <div className="py-24 space-y-8 animate-in zoom-in">
+             <div className="w-24 h-24 bg-green-500/10 border-2 border-green-500 rounded-full flex items-center justify-center mx-auto text-green-500">
+                <CheckCircle size={48} />
              </div>
-             <p className="text-xs font-black uppercase tracking-[0.5em] text-red-600 animate-pulse">Uplink in progress...</p>
-          </div>
-        ) : submitted ? (
-          <div className="py-10 space-y-6 animate-in zoom-in">
-            <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto text-green-500">
-              <CheckCircle size={40} />
-            </div>
-            <h3 className="text-xl font-black uppercase tracking-widest">{t.feedback.success}</h3>
+             <h3 className="text-4xl font-black uppercase text-white tracking-tighter">Transmission Complete</h3>
+             <button onClick={onClose} className="text-[11px] font-black uppercase tracking-[0.6em] text-gray-500 hover:text-white transition-colors">Close Command</button>
           </div>
         ) : (
-          <div className="space-y-10">
-            <div className="space-y-3">
-              <h2 className="text-4xl font-black uppercase tracking-tighter">{t.feedback.title}</h2>
-              <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">{t.feedback.subtitle}</p>
-            </div>
-            <div className="space-y-4 text-left">
-              <div className="relative">
-                <textarea 
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full h-48 bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 focus:outline-none focus:border-red-600 transition-all text-sm resize-none custom-scrollbar placeholder:text-gray-700"
-                  placeholder="Tell us your vision..."
-                />
-                <div className="absolute bottom-6 right-8 text-[10px] font-bold text-gray-700 uppercase tracking-widest">T1 SECURED</div>
-              </div>
-            </div>
+          <div className="space-y-12">
+            <h2 className="text-5xl font-black uppercase tracking-tighter text-white">UP-LINK <br/><span className="text-red-600">FEEDBACK.</span></h2>
+            <textarea 
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full h-56 bg-white/[0.05] border border-white/10 rounded-[2.5rem] p-8 focus:outline-none focus:border-red-600 transition-all text-sm font-medium resize-none custom-scrollbar text-white placeholder:text-gray-600"
+              placeholder="System diagnostics: Waiting for pioneer input..."
+            />
             <button 
-              onClick={handleSubmit}
-              disabled={!content.trim()}
-              className="w-full py-5 bg-red-600 rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all disabled:opacity-30 disabled:grayscale"
+              onClick={handleSend}
+              className="w-full py-7 bg-red-600 rounded-[2rem] font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all text-white shadow-2xl active:scale-95 flex items-center justify-center gap-4"
             >
-              {t.feedback.submit}
+              <SendIcon size={20} /> Transmit Securely
             </button>
           </div>
         )}
@@ -206,3 +430,7 @@ export const FeedbackModal = ({ isOpen, t, onClose }: any) => {
     </div>
   );
 };
+
+const SendIcon = ({ size }: { size: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+);

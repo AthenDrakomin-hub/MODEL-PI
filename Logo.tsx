@@ -7,42 +7,46 @@ interface LogoProps {
 }
 
 /**
- * Model Pi 融合 Logo
- * 设计理念：将特斯拉标志性的 T 型顶栏与希腊字母 π 的双腿结合
- * 采用硬核、几何、极简的视觉风格
+ * Model Pi 战略徽标 (V2.0 重构版)
+ * 设计逻辑：将 Tesla 的 "T" 型结构与希腊字母 "π" 的数学美感深度融合
+ * 采用 100x100 的标准化视口，确保跨组件缩放的一致性
  */
 export const ModelPiLogo = ({ className = "w-6 h-6", glow = false }: LogoProps) => (
   <svg 
     viewBox="0 0 100 100" 
-    className={`${className} ${glow ? 'drop-shadow-[0_0_15px_rgba(232,33,39,0.6)]' : ''}`} 
+    className={`${className} ${glow ? 'drop-shadow-[0_0_20px_rgba(232,33,39,0.8)]' : ''} transition-all duration-300`} 
     fill="none" 
     xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMid meet"
   >
-    {/* Tesla T-Bar style top - 代表顶层科技与速度 */}
+    {/* 顶部横梁 - 特斯拉风格的动力学线条 */}
     <path 
-      d="M10 25H90L85 35H15L10 25Z" 
-      fill="currentColor" 
+      d="M5 22C5 22 25 18 50 18C75 18 95 22 95 22L92 32H8L5 22Z" 
+      fill="currentColor"
     />
     
-    {/* Left Leg of Pi - 采用特斯拉风格的斜角切割 */}
+    {/* 左侧支柱 - 垂直且硬朗 */}
     <path 
-      d="M30 35L25 80H35L40 35H30Z" 
-      fill="currentColor" 
+      d="M32 32L28 82H40L44 32H32Z" 
+      fill="currentColor"
     />
     
-    {/* Right Leg of Pi - 带有独特的弧度，呼应特斯拉的流线型设计 */}
+    {/* 右侧支柱 - 带有优雅的流线型弧度 */}
     <path 
-      d="M70 35L75 80C75 85 70 85 65 85H60L55 80L60 35H70Z" 
-      fill="currentColor" 
+      d="M68 32L72 75C72 82 68 85 60 85C52 85 48 82 48 82L52 72C52 72 55 75 60 75C63 75 64 73 64 70L60 32H68Z" 
+      fill="currentColor"
     />
+
+    {/* 核心能量点 - 增强视觉重心 */}
+    <circle cx="50" cy="25" r="2" fill="white" className="animate-pulse" />
   </svg>
 );
 
 /**
- * 备用的极简图标（用于小尺寸显示）
+ * 极简版图标 - 用于状态栏或按钮内部
  */
 export const ModelPiIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-    <path d="M3 6h18l-1 2H4L3 6zm4 2l-1 10h2.5L9 8H7zm8 0l1 10c0 1-1 1-2 1h-1l-1-1 1-9h2z" />
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 5h20l-1 2H3L2 5zm5 2l-1 10h3L10 7H7zm8 0l1 10c0 1-1 2-3 2h-1l-1-2 1-10h3z" />
   </svg>
 );
