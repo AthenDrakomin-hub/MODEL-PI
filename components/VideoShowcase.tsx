@@ -2,6 +2,24 @@
 import React from 'react';
 import { Package, Shield, Sparkles, Zap, Globe, Cpu } from 'lucide-react';
 
+interface MagicLabelProps {
+  icon: React.ElementType;
+  title: string;
+  desc: string;
+}
+
+const MagicLabel = ({ icon: Icon, title, desc }: MagicLabelProps) => (
+  <div className="flex flex-col items-center gap-4 text-center group cursor-pointer drop-shadow-2xl">
+     <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-red-600 group-hover:scale-125 transition-all border border-white/30">
+        <Icon size={24} />
+     </div>
+     <div className="space-y-1">
+        <div className="text-sm font-black uppercase tracking-widest text-white drop-shadow-lg">{title}</div>
+        <div className="text-[10px] font-black uppercase tracking-widest text-gray-300 drop-shadow-md">{desc}</div>
+     </div>
+  </div>
+);
+
 export const VideoShowcase = ({ lang, theme }: any) => {
   return (
     <section className="relative w-full py-24 md:py-48 bg-black overflow-hidden">
@@ -53,9 +71,9 @@ export const VideoShowcase = ({ lang, theme }: any) => {
            {/* 悬浮在视频上的“魔法”标签 */}
            <div className="absolute inset-0 flex items-center justify-center bg-black/10">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-24">
-                 <MagicLabel icon={<Globe />} title="全球同频" desc="无死角覆盖" />
-                 <MagicLabel icon={<Zap />} title="瞬时控制" desc="零延迟感应" />
-                 <MagicLabel icon={<Cpu />} title="智慧生命" desc="自进化系统" />
+                 <MagicLabel icon={Globe} title="全球同频" desc="无死角覆盖" />
+                 <MagicLabel icon={Zap} title="瞬时控制" desc="零延迟感应" />
+                 <MagicLabel icon={Cpu} title="智慧生命" desc="自进化系统" />
               </div>
            </div>
            
@@ -65,15 +83,3 @@ export const VideoShowcase = ({ lang, theme }: any) => {
     </section>
   );
 };
-
-const MagicLabel = ({ icon, title, desc }: any) => (
-  <div className="flex flex-col items-center gap-4 text-center group cursor-pointer drop-shadow-2xl">
-     <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-red-600 group-hover:scale-125 transition-all border border-white/30">
-        {React.cloneElement(icon as React.ReactElement, { size: 24 })}
-     </div>
-     <div className="space-y-1">
-        <div className="text-sm font-black uppercase tracking-widest text-white drop-shadow-lg">{title}</div>
-        <div className="text-[10px] font-black uppercase tracking-widest text-gray-300 drop-shadow-md">{desc}</div>
-     </div>
-  </div>
-);

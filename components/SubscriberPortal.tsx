@@ -47,7 +47,7 @@ export const SubscriberPortal = ({ onClose, t, lang, dbData }: any) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[150] bg-black animate-in fade-in duration-500 overflow-y-auto custom-scrollbar scanlines">
+    <div className="fixed inset-0 z-[500] bg-black animate-in fade-in duration-500 overflow-y-auto custom-scrollbar scanlines">
       {/* Background Decor */}
       <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/30 blur-[120px] rounded-full animate-pulse" />

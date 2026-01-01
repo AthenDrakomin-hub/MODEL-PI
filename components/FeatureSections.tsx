@@ -16,7 +16,7 @@ export const FeatureSections = ({ t, onClose }: any) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#050505] animate-in fade-in duration-700 flex flex-col overflow-y-auto custom-scrollbar">
+    <div className="fixed inset-0 z-[500] bg-[#050505] animate-in fade-in duration-700 flex flex-col overflow-y-auto custom-scrollbar">
       {/* Immersive Deep Space Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#000_100%)]" />

@@ -71,7 +71,6 @@ export default function App() {
     const savedData = localStorage.getItem(VIRTUAL_DB_KEY);
     if (savedData) {
       const parsed = JSON.parse(savedData);
-      // 强制更新已保存数据中的 endTime 为全局固定日期
       setDbData({ ...parsed, endTime: GLOBAL_LAUNCH_DATE });
     } else {
       const newData = {
@@ -93,8 +92,6 @@ export default function App() {
     const totalDuration = GLOBAL_LAUNCH_DATE - GLOBAL_START_DATE;
     const elapsed = currentTime - GLOBAL_START_DATE;
     const progressFactor = Math.max(0, Math.min(1, elapsed / totalDuration));
-    
-    // 基于时间进度的平滑增长
     const booked = Math.floor(dbData.initialBookings + progressFactor * (TARGET_BOOKINGS - dbData.initialBookings));
     
     return {
@@ -114,7 +111,13 @@ export default function App() {
     document.documentElement.className = theme === 'midnight' ? 'dark midnight' : 'solar';
     
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActiveDoc(null);
+      if (e.key === 'Escape') {
+        setActiveDoc(null);
+        setShowCheckout(false);
+        setShowPortal(false);
+        setShowFeatureExplorer(false);
+        setAiOpen(false);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     
@@ -190,7 +193,7 @@ export default function App() {
         onOpenFeatures={() => setShowFeatureExplorer(true)}
       />
 
-      <main className="mesh-gradient">
+      <main className="mesh-gradient min-h-screen relative z-0">
         <HeroSection t={t} stats={stats} onOrder={() => setShowCheckout(true)} theme={theme} />
         <ComparisonSection t={t} theme={theme} />
         <VideoShowcase lang={lang} theme={theme} />
@@ -200,7 +203,7 @@ export default function App() {
 
       <Footer t={t} onOpenDoc={setActiveDoc} theme={theme} />
 
-      {/* AI Assistant */}
+      {/* AI Assistant Button */}
       <div className="fixed bottom-8 right-8 z-[200]">
         {!aiOpen ? (
           <button 
@@ -251,10 +254,15 @@ export default function App() {
         )}
       </div>
 
-      {showFeatureExplorer && <FeatureSections t={t} onClose={() => setShowFeatureExplorer(false)} />}
-      {showPortal && <SubscriberPortal onClose={() => setShowPortal(false)} t={t} lang={lang} dbData={dbData} />}
-      {renderActiveDoc()}
-      <CheckoutModal isOpen={showCheckout} t={t} onClose={() => setShowCheckout(false)} onPaymentSuccess={handlePaymentSuccess} />
+      {/* Global Modals Layer - Explicitly fixed and highest z-index */}
+      <div className="fixed inset-0 pointer-events-none z-[1000]">
+        <div className="pointer-events-auto h-full w-full">
+          {showFeatureExplorer && <FeatureSections t={t} onClose={() => setShowFeatureExplorer(false)} />}
+          {showPortal && <SubscriberPortal onClose={() => setShowPortal(false)} t={t} lang={lang} dbData={dbData} />}
+          {renderActiveDoc()}
+          {showCheckout && <CheckoutModal isOpen={showCheckout} t={t} onClose={() => setShowCheckout(false)} onPaymentSuccess={handlePaymentSuccess} />}
+        </div>
+      </div>
     </div>
   );
 }

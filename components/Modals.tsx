@@ -27,7 +27,7 @@ const PERSONAL_CONFIG = {
  * 模拟数据加密视觉组件
  */
 const EncryptionOverlay = ({ stage }: { stage: string }) => (
-  <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center p-12 text-center animate-in fade-in zoom-in duration-300">
+  <div className="absolute inset-0 z-[1100] bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center p-12 text-center animate-in fade-in zoom-in duration-300">
     <div className="relative mb-12">
       <div className="absolute inset-0 bg-red-600/20 blur-3xl animate-pulse rounded-full" />
       <div className="w-24 h-24 border-2 border-red-600 rounded-full flex items-center justify-center text-red-600 relative z-10">
@@ -51,25 +51,14 @@ export const DocumentModal = ({ activeDoc, lang, onClose }: any) => {
   if (!activeDoc) return null;
   const t = TRANSLATIONS[lang] || TRANSLATIONS['en'];
   
-  const docKeyMap: any = {
-    'Support': 'Support',
-    'Terms': 'Terms',
-    'Refund Policy': 'Refund Policy',
-    '联系支持': '联系支持',
-    '服务条款': '服务条款',
-    '退款政策': '退款政策',
-    '隐私声明': '隐私声明',
-    'Whitepaper': 'Whitepaper'
-  };
-  
-  const actualKey = docKeyMap[activeDoc] || activeDoc;
-  const docData = t.docs?.[actualKey] || { title: activeDoc, subtitle: 'v1.0', sections: [] };
-  const isSupport = actualKey === '联系支持' || actualKey === 'Support';
+  // Directly use activeDoc string to map to translation docs
+  const docData = t.docs?.[activeDoc] || { title: activeDoc, subtitle: 'v1.0', sections: [] };
+  const isSupport = ['联系支持', 'Support', '先锋指挥中心', 'Pioneer Support Center'].includes(activeDoc);
 
   return (
-    <div className="fixed inset-0 z-[150] bg-black/98 backdrop-blur-3xl animate-in fade-in duration-300 overflow-y-auto custom-scrollbar scanlines">
+    <div className="fixed inset-0 z-[1000] bg-black/95 backdrop-blur-3xl animate-in fade-in duration-300 overflow-y-auto custom-scrollbar scanlines">
       <div className="max-w-5xl mx-auto px-6 py-12 md:py-24 relative">
-        <button onClick={onClose} className="fixed top-8 right-8 z-[160] p-4 bg-white/10 hover:bg-red-600 rounded-full transition-all group border border-white/20 shadow-2xl">
+        <button onClick={onClose} className="fixed top-8 right-8 z-[1010] p-4 bg-white/10 hover:bg-red-600 rounded-full transition-all group border border-white/20 shadow-2xl">
           <X size={24} className="group-hover:rotate-90 transition-transform text-white" />
         </button>
 
@@ -115,7 +104,7 @@ export const DocumentModal = ({ activeDoc, lang, onClose }: any) => {
                       className="w-full h-40 bg-white/5 border border-white/10 rounded-3xl p-6 text-white focus:outline-none focus:border-red-600 transition-all text-sm font-mono"
                       placeholder="Input your mission diagnostics..."
                     />
-                    <button className="px-12 py-5 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-white hover:text-black transition-all flex items-center gap-4 shadow-2xl">
+                    <button className="px-12 py-5 bg-red-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-black transition-all flex items-center gap-4 shadow-2xl">
                        <Send size={16} /> Transmit Request
                     </button>
                   </div>
@@ -149,7 +138,6 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
     e.preventDefault();
     if (!txid.trim() || !email.trim()) return;
     
-    // 视觉上的加密流程
     setIsVerifying(true);
     setSecuringStage("Encrypting Packet...");
     
@@ -160,7 +148,6 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
     setSecuringStage("Securing Transmission...");
 
     try {
-      // 提交真实数据
       await fetch('https://formspree.io/f/model-pi@proton.me', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -169,7 +156,7 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
           txid, 
           amount: "$89.70", 
           method: "USDT-TRC20",
-          secure_hash: btoa(txid + email).substring(0, 16) // 模拟一个安全哈希
+          secure_hash: btoa(txid + email).substring(0, 16)
         })
       });
       setIsVerifying(false);
@@ -187,10 +174,9 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[160] bg-black animate-in fade-in duration-500 overflow-y-auto scanlines">
+    <div className="fixed inset-0 z-[1000] bg-black/98 backdrop-blur-2xl animate-in fade-in duration-500 overflow-y-auto scanlines">
       <div className="min-h-screen flex flex-col lg:flex-row">
         
-        {/* Left Side: Pioneer Status */}
         <div className="w-full lg:w-[40%] bg-neutral-950 p-8 md:p-16 flex flex-col justify-between border-r border-white/10 relative">
           <div className="space-y-12 relative z-10">
             <button onClick={onClose} className="flex items-center space-x-2 text-white hover:text-red-500 mb-12 group transition-colors">
@@ -223,7 +209,6 @@ export const CheckoutModal = ({ isOpen, t, onClose, onPaymentSuccess }: any) => 
           </div>
         </div>
 
-        {/* Right Side: Direct Payment */}
         <div className="flex-1 bg-black p-8 md:p-24 flex flex-col justify-center items-center relative">
           {isVerifying && securingStage && <EncryptionOverlay stage={securingStage} />}
 
@@ -393,7 +378,7 @@ export const FeedbackModal = ({ isOpen, t, onClose }: any) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[180] flex items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
+    <div className="fixed inset-0 z-[1100] flex items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
       <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl" onClick={onClose} />
       <div className="relative bg-neutral-900 w-full max-w-xl p-12 md:p-16 rounded-[4rem] border border-white/20 text-center shadow-3xl overflow-hidden">
         {isSending && securingStage && <EncryptionOverlay stage={securingStage} />}
