@@ -1,0 +1,8 @@
+{
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "name": "Tesla Model Pi - Ultimate Concept",
+  "description": ""
+}
