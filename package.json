@@ -126,6 +126,11 @@
     "@floating-ui/*": {
       "react": "$react",
       "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-popper": {
+      "@floating-ui/react-dom": "$@floating-ui/react-dom",
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   },
   "pnpm": {
@@ -141,6 +146,11 @@
         "react-dom": "$react-dom"
       },
       "@floating-ui/*": {
+        "react": "$react",
+        "react-dom": "$react-dom"
+      },
+      "@radix-ui/react-popper": {
+        "@floating-ui/react-dom": "$@floating-ui/react-dom",
         "react": "$react",
         "react-dom": "$react-dom"
       }

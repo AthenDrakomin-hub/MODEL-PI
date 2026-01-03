@@ -18,11 +18,19 @@ Tesla-PiStore is a full-stack e-commerce application for reserving Tesla Model Ï
 
 ## Project Structure
 
-- `client/` - React frontend application with components, hooks, and pages
 - `api/` - Vercel Serverless Functions with API routes and database access
+  - `api/products/` - Product-related API endpoints
+  - `api/cart/` - Shopping cart API endpoints
+  - `api/utils/` - Database connection and utility functions
+- `client/` - React frontend application with components, hooks, and pages
 - `shared/` - Shared TypeScript schemas and API route definitions
 - `src/` - Additional frontend source files and services
+  - `src/cart/` - Shopping cart functionality
+  - `src/hooks/` - Custom React hooks
+  - `src/inventory/` - Inventory management
+  - `src/payment/` - Payment processing logic
 - `components/` - Reusable UI components
+- `public/` - Static assets
 
 ## Key Dependencies
 
@@ -56,6 +64,9 @@ npm run db:push
 
 # Preview built application
 npm run preview
+
+# Vercel build (used in production)
+npm run vercel-build
 ```
 
 ## API Routes
@@ -64,6 +75,7 @@ npm run preview
 - `GET /api/products/:id` - Get specific product
 - `GET /api/cart/:sessionId` - Get cart items for session
 - `POST /api/cart/:sessionId` - Sync cart items for session
+- `GET /api/init` - Initialize database (post-deployment)
 
 ## Database Schema
 
@@ -105,6 +117,8 @@ PORT=5000
 - Database schema is managed with Drizzle ORM and Zod validation
 - The application uses a monorepo structure with shared types between frontend and backend
 - The application is designed for Vercel deployment with Serverless Functions handling backend operations
+- Serverless-optimized database connection pooling with global pool in production
+- CORS headers configured in vercel.json for cross-origin requests
 
 ## Build Process
 
@@ -112,6 +126,7 @@ PORT=5000
 - The `overrides` section in package.json handles React 19 compatibility with UI libraries
 - Vite handles module aliasing (@ for src, @shared for shared directory)
 - Vercel Serverless Functions are automatically built and deployed by the Vercel platform
+- Chunk optimization implemented with manual chunks for vendor libraries
 
 ## Translation System
 
@@ -119,3 +134,12 @@ PORT=5000
 - Translation files located in `src/translations.ts` with base configuration
 - Current implementation only includes Chinese and English translations
 - RTL language support needed for Arabic and other right-to-left languages
+
+## Deployment
+
+- Deployed on Vercel platform with Serverless Functions
+- Build command: `npm run vercel-build`
+- Output directory: `dist`
+- CORS headers configured for cross-origin requests
+- Database initialization endpoint: `/api/init`
+- Vercel rewrites configured for API routes in vercel.json
