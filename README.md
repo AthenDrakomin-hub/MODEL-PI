@@ -1,35 +1,51 @@
 
-# 🚀 Tesla Model Pi 网页上线保姆级教程
+# 🚀 Tesla Model Pi - 全栈电商应用
 
-这个项目是一个展示特斯拉手机概念的网页。虽然它是“概念版”，但为了让它在网上跑起来（比如 AI 聊天、预订功能），你需要按照下面的步骤操作。
+这个项目是一个融合了 Model-pi 前端优势和 Tesla-PiStore 后端功能的完整电商应用。项目包含：
+- 先进的 3D UI 界面和动态交互 (来自 Model-Pi)
+- 完整的电商系统和数据库持久化 (来自 Tesla-PiStore)
 
 ---
 
 ## 🛠️ 第一步：你需要准备什么？
 
 1.  **代码仓库**：把这些代码传到你的 GitHub。
-2.  **API 密钥**：去 [Google AI Studio](https://aistudio.google.com/) 免费申请一个 `API_KEY`。没有它，网页里的 AI 助手就是个摆设。
-3.  **Vercel 账号**：推荐用 Vercel 部署，因为又快又稳，还免费。
+2.  **数据库**：准备一个 PostgreSQL 数据库 URL (如 PlanetScale, Supabase, 或其他提供商)。
+3.  **Vercel 账号**：用于部署前端部分。
+4.  **后端托管**：由于项目包含 Express.js 后端，建议使用 Railway、Render 或其他支持 Node.js 后端的平台。
 
 ---
 
-## 🔑 第二步：环境变量（最关键！）
+## 🔑 第二步：环境变量
 
-在 Vercel 部署的时候，必须在 **Settings -> Environment Variables** 填入这几个东西，否则网页会报错：
+在部署时，必须设置以下环境变量：
 
 | 名字 | 是否必须 | 干嘛用的 |
 | :--- | :--- | :--- |
-| `API_KEY` | **是** | Google Gemini 的密钥，AI 聊天的动力来源。 |
+| `DATABASE_URL` | **是** | PostgreSQL 数据库连接字符串。 |
 | `VITE_USDT_ADDR` | **是** | 你的收钱地址（USDT TRC-20），会显示在支付弹窗里。 |
 | `VITE_PAYPAL_URL` | 否 | 你的 PayPal 链接，不填的话支付页面会少个选项。 |
 
 ---
 
-## 📦 第三步：怎么发布？
+## 📦 第三步：部署方案
 
-1.  **关联仓库**：在 Vercel 选你的 GitHub 项目。
-2.  **填好变量**：把上面的 `API_KEY` 填进去。
-3.  **点下 Deploy**：等一两分钟，你的网页就上线了。
+### 方案一：分离部署（推荐）
+1. **前端部分**：部署到 Vercel
+   - 关联 GitHub 仓库
+   - 设置环境变量 (VITE_USDT_ADDR, VITE_PAYPAL_URL)
+   - 构建命令：`npm install && npm run build:client`
+   - 输出目录：`dist`
+
+2. **后端部分**：部署到 Railway/Render
+   - 关联 GitHub 仓库
+   - 设置环境变量 (DATABASE_URL)
+   - 启动命令：`npm run start`
+
+### 方案二：一体化部署
+- 部署到支持 Node.js 后端的平台（如 Railway、Render、DigitalOcean App Platform）
+- 设置所有环境变量
+- 启动命令：`npm run start`
 
 ---
 
@@ -42,19 +58,25 @@
 npm install
 
 # 2. 建立一个 .env 文件
-# 在里面写上 API_KEY=你的密钥
+# 在里面写上所有必要的环境变量
 
-# 3. 跑起来
+# 3. 启动开发服务器（前后端同时）
 npm run dev
+
+# 或分别启动
+npm run dev:client  # 前端
+npm run dev:server  # 后端
 ```
 
 ---
 
-## ⚠️ 避坑指南
+## ⚠️ 部署注意事项
 
--   **报错 TS2322/TS2786**：我已经帮你修好了这些 TypeScript 的报错（图标大小和命名冲突）。
--   **预订数据去哪了**：为了省事，所有预订信息都存在用户的浏览器里（localStorage）。这意味着你刷新或者换个电脑，之前的预订记录就“消失”了。
--   **AI 不说话**：检查你的 `API_KEY` 是否有效，并且确认你没有在不支持 Gemini 的地区直接访问（可能需要梯子或者配置代理）。
+-   **全栈应用**：由于项目包含 Express.js 后端，不能完全在 Vercel 静态托管上运行
+-   **数据库迁移**：部署后需要运行 `npm run db:push` 进行数据库初始化
+-   **API 端点**：确保前端正确连接到后端 API 端点
+-   **环境变量**：确保所有必需的环境变量在部署环境中都已设置
 
 ---
-*祝你的 Model Pi 网页大火！*
+
+*祝你的 Model Pi 电商应用成功上线！*

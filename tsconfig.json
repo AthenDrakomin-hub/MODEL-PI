@@ -16,7 +16,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@shared/*": ["./shared/*"]
+    }
   },
   "include": [
     "index.tsx", 
@@ -27,6 +32,10 @@
     "Logo.tsx", 
     "services/**/*.ts", 
     "components/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "shared/**/*.ts",
+    "server/**/*.ts",
     "vite.config.ts"
   ],
   "exclude": ["node_modules", "dist"]

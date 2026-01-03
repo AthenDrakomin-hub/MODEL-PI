@@ -1,6 +1,7 @@
 
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig(({ mode }) => {
   // 注入环境变量，确保在不同平台（Vercel, Local）一致性
@@ -8,8 +9,13 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        '@shared': path.resolve(__dirname, './shared'),
+      },
+    },
     define: {
-      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV || 'production'),
       'process.env.VITE_USDT_ADDR': JSON.stringify(env.VITE_USDT_ADDR || ''),
       'process.env.VITE_PAYPAL_URL': JSON.stringify(env.VITE_PAYPAL_URL || ''),
