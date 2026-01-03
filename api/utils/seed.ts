@@ -1,58 +1,13 @@
-import { db } from "./db";
-import { products, cartItems, type Product, type InsertProduct, type CartItem, type InsertCartItem } from "@shared/schema";
-import { eq, and } from "drizzle-orm";
+// 数据库初始化脚本
+import { db } from './db';
+import { products } from '../../shared/schema';
 
-export interface IStorage {
-  getProducts(): Promise<Product[]>;
-  getProduct(id: number): Promise<Product | undefined>;
-  getCartItems(sessionId: string): Promise<(CartItem & { product: Product })[]>;
-  syncCart(sessionId: string, items: { productId: number; quantity: number }[]): Promise<void>;
-  seedProducts(): Promise<void>;
-}
-
-export class DatabaseStorage implements IStorage {
-  async getProducts(): Promise<Product[]> {
-    return await db.select().from(products);
-  }
-
-  async getProduct(id: number): Promise<Product | undefined> {
-    const [product] = await db.select().from(products).where(eq(products.id, id));
-    return product;
-  }
-
-  async getCartItems(sessionId: string): Promise<(CartItem & { product: Product })[]> {
-    const items = await db.select().from(cartItems).where(eq(cartItems.sessionId, sessionId));
-    
-    // Join with products manually or via query
-    const result = [];
-    for (const item of items) {
-      const product = await this.getProduct(item.productId);
-      if (product) {
-        result.push({ ...item, product });
-      }
-    }
-    return result;
-  }
-
-  async syncCart(sessionId: string, items: { productId: number; quantity: number }[]): Promise<void> {
-    // Clear existing cart for session (simple sync approach)
-    await db.delete(cartItems).where(eq(cartItems.sessionId, sessionId));
-    
-    if (items.length > 0) {
-      await db.insert(cartItems).values(
-        items.map(item => ({
-          sessionId,
-          productId: item.productId,
-          quantity: item.quantity,
-        }))
-      );
-    }
-  }
-
-  async seedProducts(): Promise<void> {
-    // Always clear and re-seed to match the latest requirements
+export async function seedProducts() {
+  try {
+    // 清空现有产品数据
     await db.delete(products);
     
+    // 插入初始产品数据
     await db.insert(products).values([
       {
         name: "Model π Standard",
@@ -125,7 +80,10 @@ export class DatabaseStorage implements IStorage {
         logistics: "Priority Air Shipping (5-10 business days)",
       },
     ]);
+    
+    console.log('Database seeded successfully');
+  } catch (error) {
+    console.error('Error seeding database:', error);
+    throw error;
   }
 }
-
-export const storage = new DatabaseStorage();

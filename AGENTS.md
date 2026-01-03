@@ -4,12 +4,12 @@ This file provides guidance to Qoder (qoder.com) when working with code in this 
 
 ## Project Overview
 
-Tesla-PiStore is a full-stack e-commerce application for reserving Tesla Model Ï€ phones. It features a React frontend with a Node.js/Express backend, PostgreSQL database, and shared TypeScript schemas. The application features a booking/pre-order system and extensive documentation sections.
+Tesla-PiStore is a full-stack e-commerce application for reserving Tesla Model Ï€ phones. It features a React frontend with Vercel Serverless Functions backend, PostgreSQL database, and shared TypeScript schemas. The application features a booking/pre-order system and extensive documentation sections. Designed for seamless deployment to Vercel platform.
 
 ## Architecture
 
 - **Frontend**: React 19 application using Vite, TypeScript, Tailwind CSS, and shadcn/ui components
-- **Backend**: Express.js server with PostgreSQL database using Drizzle ORM
+- **Backend**: Vercel Serverless Functions with PostgreSQL database using Drizzle ORM
 - **Shared**: Common TypeScript schemas and API route definitions used by both client and server
 - **Database**: PostgreSQL with Drizzle ORM and Zod validation schemas
 - **State Management**: React hooks with localStorage persistence
@@ -19,20 +19,22 @@ Tesla-PiStore is a full-stack e-commerce application for reserving Tesla Model Ï
 ## Project Structure
 
 - `client/` - React frontend application with components, hooks, and pages
-- `server/` - Express.js backend with routes, database storage, and server logic
+- `api/` - Vercel Serverless Functions with API routes and database access
 - `shared/` - Shared TypeScript schemas and API route definitions
-- `script/` - Build scripts
+- `src/` - Additional frontend source files and services
+- `components/` - Reusable UI components
 
 ## Key Dependencies
 
 - React 19 with Vite
-- Express.js for the backend
+- Vercel Serverless Functions for the backend
 - PostgreSQL with Drizzle ORM
 - Zod for schema validation
 - Tailwind CSS for styling
 - shadcn/ui for components
 - @tanstack/react-query for data fetching
 - Framer Motion for animations
+- concurrently for running multiple processes
 
 ## Development Commands
 
@@ -40,14 +42,8 @@ Tesla-PiStore is a full-stack e-commerce application for reserving Tesla Model Ï
 # Install dependencies
 npm install
 
-# Start development server (both client and server)
+# Start development server
 npm run dev
-
-# Start only client
-npm run dev:client
-
-# Start only server
-npm run dev:server
 
 # Build the application
 npm run build
@@ -57,6 +53,9 @@ npm run check
 
 # Push database schema
 npm run db:push
+
+# Preview built application
+npm run preview
 ```
 
 ## API Routes
@@ -78,6 +77,7 @@ npm run db:push
 - Cart synchronization with backend
 - Payment processing UI
 - Responsive design with Tesla-inspired theme
+- 3D UI interactions and dynamic components
 
 ## Environment Variables
 
@@ -103,6 +103,15 @@ PORT=5000
 - Countdown timer and booking statistics are dynamically calculated
 - Backend API provides full CRUD operations for products and cart management
 - Database schema is managed with Drizzle ORM and Zod validation
+- The application uses a monorepo structure with shared types between frontend and backend
+- The application is designed for Vercel deployment with Serverless Functions handling backend operations
+
+## Build Process
+
+- Client builds to the `dist/` directory
+- The `overrides` section in package.json handles React 19 compatibility with UI libraries
+- Vite handles module aliasing (@ for src, @shared for shared directory)
+- Vercel Serverless Functions are automatically built and deployed by the Vercel platform
 
 ## Translation System
 

@@ -44,7 +44,7 @@ npm run dev
 ## 项目结构
 
 - `client/` - 前端代码 (React 19, Vite)
-- `server/` - 后端代码 (Express.js, API 路由)
+- `api/` - Vercel Serverless Functions (API 路由)
 - `shared/` - 共享代码 (API 定义, 数据库模式)
 - `src/` - 前端源代码 (包含 hooks, components 等)
 
@@ -53,7 +53,6 @@ npm run dev
 - `DATABASE_URL` - PostgreSQL 数据库连接字符串
 - `VITE_USDT_ADDR` - USDT 收款地址
 - `VITE_PAYPAL_URL` - PayPal 支付链接
-- `PORT` - 服务器端口 (默认 5000)
 
 ## 功能特性
 
