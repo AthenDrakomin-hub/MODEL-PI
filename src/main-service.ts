@@ -38,21 +38,21 @@ export class TeslaModelPiService {
   /**
    * 获取库存管理器
    */
-  getInventoryManager(): InventoryManager {
+  getInventoryManager(): InventoryManager | null {
     return this.config.enableInventoryManagement ? this.inventoryManager : null;
   }
 
   /**
    * 获取支付处理器
    */
-  getPaymentProcessor(): PaymentProcessor {
+  getPaymentProcessor(): PaymentProcessor | null {
     return this.config.enablePaymentProcessing ? this.paymentProcessor : null;
   }
 
   /**
    * 获取购物车服务
    */
-  getShoppingCart(): ShoppingCart {
+  getShoppingCart(): ShoppingCart | null {
     return this.config.enableShoppingCart ? this.shoppingCart : null;
   }
 

@@ -46,7 +46,7 @@ export interface PayPalTransaction {
   paymentId: string;
   orderId: string;
   amount: number;
-  currency: 'USD';
+  currency: 'USD' | 'USDT';
   status: 'created' | 'approved' | 'completed' | 'failed' | 'refunded';
   payerId?: string;
   captureId?: string;
@@ -273,7 +273,7 @@ export class PaymentProcessor {
   /**
    * 生成 USDT 接收地址
    */
-  private generateUSDTAddress(paymentMethod: 'usdt-erc20' | 'usdt-trc20'): string {
+  private generateUSDTAddress(paymentMethod: 'usdt-erc20' | 'usdt-trc20' | 'paypal'): string {
     // 在实际实现中，这里会调用钱包服务生成新的接收地址
     // 模拟生成地址
     const prefix = paymentMethod === 'usdt-erc20' ? '0x' : 'T';
