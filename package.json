@@ -122,6 +122,10 @@
     "@floating-ui/react-dom": {
       "react": "$react",
       "react-dom": "$react-dom"
+    },
+    "@floating-ui/*": {
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   },
   "pnpm": {
@@ -133,6 +137,10 @@
         "@types/react-dom": "$@types/react-dom"
       },
       "@floating-ui/react-dom": {
+        "react": "$react",
+        "react-dom": "$react-dom"
+      },
+      "@floating-ui/*": {
         "react": "$react",
         "react-dom": "$react-dom"
       }
