@@ -69,6 +69,12 @@ npm run preview
 npm run vercel-build
 ```
 
+## Dependency Management
+
+Note: When running `npm install`, you may see peer dependency warnings related to React 19 and UI libraries. This is expected behavior due to the compatibility overrides specified in the package.json file and does not affect functionality.
+
+Some components may show React 19 compatibility errors during runtime. These are known compatibility issues with certain UI libraries that haven't been fully updated for React 19. The application should still function correctly despite these warnings.
+
 ## API Routes
 
 - `GET /api/products` - Get all products
@@ -119,6 +125,7 @@ PORT=5000
 - The application is designed for Vercel deployment with Serverless Functions handling backend operations
 - Serverless-optimized database connection pooling with global pool in production
 - CORS headers configured in vercel.json for cross-origin requests
+- npm install may show peer dependency warnings due to React 19 compatibility with UI libraries - this is expected and handled by the overrides in package.json
 
 ## Build Process
 
