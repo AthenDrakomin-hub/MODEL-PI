@@ -3,12 +3,15 @@ import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { TRANSLATIONS } from './translations';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { HeroSection } from './components/HeroSection';
+import { NewHeroSection } from './components/NewHeroSection';
 import { WhitepaperSection } from './components/WhitepaperSection';
 import { BookingSection } from './components/BookingSection';
 import { VideoShowcase } from './components/VideoShowcase';
 import { ComparisonSection } from './components/ComparisonSection';
 import { CheckoutModal, DocumentModal } from './components/Modals';
+import { CartSidebar } from './components/CartSidebar';
+import { LegalCompliancePage } from './components/LegalCompliancePage';
+import { LegalComplianceDetail } from './components/LegalComplianceDetail';
 import { SupportedLang } from './types';
 import { Loader2 } from 'lucide-react';
 
@@ -45,6 +48,8 @@ export default function App() {
   const [showCheckout, setShowCheckout] = useState(false);
   const [showPortal, setShowPortal] = useState(false);
   const [showFeatureExplorer, setShowFeatureExplorer] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+  const [showLegalCompliance, setShowLegalCompliance] = useState(false);
   const [activeDoc, setActiveDoc] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [isInitializing, setIsInitializing] = useState(true);
@@ -124,7 +129,9 @@ export default function App() {
          docName.includes('legal') || docName.includes('服务条款') || docName.includes('法律') ? <LegalAgreementDetail onClose={close} lang={lang} /> :
          docName.includes('treaty') || docName.includes('条约') ? <StarlinkTreatyDetail onClose={close} lang={lang} /> :
          docName.includes('pioneer') || docName.includes('先锋') ? <PioneerPlanDetail onClose={close} lang={lang} /> :
+         docName.includes('legalcompliance') ? <LegalComplianceDetail onClose={close} lang={lang} /> :
          <DocumentModal activeDoc={activeDoc} lang={lang} onClose={close} />}
+
       </Suspense>
     );
   };
@@ -153,10 +160,11 @@ export default function App() {
         onOrder={() => setShowCheckout(true)} onOpenPortal={() => setShowPortal(true)}
         onOpenWhitepaper={() => setActiveDoc('Whitepaper')}
         onOpenFeatures={() => setShowFeatureExplorer(true)}
+        onOpenCart={() => setShowCart(true)}
       />
 
       <main className="mesh-gradient min-h-screen relative z-0">
-        <HeroSection t={t} stats={stats} onOrder={() => setShowCheckout(true)} theme={theme} />
+        <NewHeroSection t={t} stats={stats} onOrder={() => setShowCheckout(true)} theme={theme} />
         <ComparisonSection t={t} theme={theme} />
         <VideoShowcase lang={lang} theme={theme} />
         <WhitepaperSection t={t} lang={lang} onOpenFull={() => setActiveDoc('Whitepaper')} theme={theme} />
@@ -173,6 +181,7 @@ export default function App() {
       </Suspense>
 
       {showCheckout && <CheckoutModal isOpen={showCheckout} t={t} onClose={() => setShowCheckout(false)} onPaymentSuccess={() => { setDbData(p => ({...p, isPaid:true, joinedAt:Date.now()})); setShowCheckout(false); setShowPortal(true); }} />}
+      {showCart && <CartSidebar isOpen={showCart} onClose={() => setShowCart(false)} onCheckout={() => { setShowCart(false); setShowCheckout(true); }} />}
     </div>
   );
 }

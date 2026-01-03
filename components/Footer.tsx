@@ -17,6 +17,9 @@ export const Footer = ({ t, onOpenDoc }: any) => (
             {link}
           </button>
         ))}
+        <button onClick={() => onOpenDoc('LegalCompliance')} className="hover:text-white transition-colors">
+          Legal Compliance
+        </button>
       </div>
 
       <div className="flex flex-col items-center space-y-8">

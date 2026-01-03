@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { Globe, Radio, ChevronDown, Menu, X, Smartphone, Sun, Moon } from 'lucide-react';
+import { Globe, Radio, ChevronDown, Menu, X, Smartphone, Sun, Moon, ShoppingCart } from 'lucide-react';
 import { ModelPiLogo } from '../Logo';
 import { CountdownTimer } from './CountdownTimer';
+import { CartIcon } from './CartIcon';
 
-export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, isPaid, onOrder, onOpenPortal, onOpenWhitepaper, onOpenFeatures }: any) => {
+export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, isPaid, onOrder, onOpenPortal, onOpenWhitepaper, onOpenFeatures, onOpenCart }: any) => {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [tickerIndex, setTickerIndex] = useState(0);
@@ -92,8 +93,9 @@ export const Header = ({ t, lang, setLang, theme, setTheme, scrolled, endTime, i
           </div>
 
           <div className="flex items-center gap-3">
-            <button onClick={isPaid ? onOpenPortal : onOrder} className="bg-red-600 rounded-full px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-black transition-all shadow-xl shadow-red-600/20 active:scale-95">
-              {isPaid ? t.nav.portal : t.nav.action}
+            <CartIcon onClick={onOpenCart} />
+            <button onClick={isPaid ? onOpenPortal : onOpenCart} className="bg-red-600 rounded-full px-6 py-2.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-black transition-all shadow-xl shadow-red-600/20 active:scale-95">
+              {isPaid ? t.nav.portal : '购物车'}
             </button>
             <button onClick={() => setMobileMenuOpen(true)} className="md:hidden p-2 bg-white/5 border border-white/10 rounded-xl text-white">
               <Menu size={20} />
